@@ -10,3 +10,6 @@
 
 ## Stage 1 - smoke test
     python run_all.py --quick
+
+## Stage 2 - data
+    python run_all.py --stages prepare
