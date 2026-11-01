@@ -1,0 +1,135 @@
+# Single source of truth for every experiment in this homework.
+# Change values HERE, not inside scripts, so the report's reproducibility table matches what ran.
+
+seed: 0
+device: "0"          # "0" = first CUDA GPU, "cpu" for smoke tests
+half: true           # FP16 inference on GPU (ignored on CPU)
+
+# Thresholds used for mAP evaluation. A LOW conf is required for mAP:
+# a 0.25 threshold truncates the precision-recall curve and lowers AP.
+eval_thresholds:
+  conf: 0.001
+  nms_iou: 0.7       # Ultralytics' own val default; ignored by NMS-free RT-DETR
+  max_det: 300
+
+# Thresholds used only for qualitative pictures / failure analysis
+vis_thresholds:
+  conf: 0.30
+
+datasets:
+  coco:
+    gt: data/coco/annotations/instances_val2017.json
+    images: data/coco/val2017
+    label_space: coco
+  kitti:
+    # Built by scripts/prepare_data.py from Ultralytics' KITTI release
+    # (7,481 labeled KITTI training images, split 5,985 train / 1,496 val).
+    gt_native: data/kitti/annotations/kitti_val_native.json      # 7 KITTI classes
+    gt_cocomap: data/kitti/annotations/kitti_val_cocomap.json    # mapped to COCO ids
+    images: data/kitti/images/val
+    yolo_yaml: configs/kitti_local.yaml                          # generated, for fine-tuning
+    label_space: kitti
+
+# KITTI -> COCO taxonomy mapping used for zero-shot evaluation of COCO models.
+# Follows the official KITTI devkit idea of "neighbouring classes": they are
+# marked iscrowd=1 (ignore regions) so a COCO 'car' on a Van, or a COCO
+# 'person' on a Cyclist, is neither rewarded nor punished.
+taxonomy:
+  kitti_classes: [car, van, truck, pedestrian, person_sitting, cyclist, tram, misc]
+  native_eval_classes: [car, van, truck, pedestrian, person_sitting, cyclist, tram]  # misc dropped
+  to_coco:
+    car:            {coco_id: 3, coco_name: car,    ignore: false}
+    van:            {coco_id: 3, coco_name: car,    ignore: true}
+    truck:          {coco_id: 8, coco_name: truck,  ignore: false}
+    pedestrian:     {coco_id: 1, coco_name: person, ignore: false}
+    person_sitting: {coco_id: 1, coco_name: person, ignore: true}
+    cyclist:        {coco_id: 1, coco_name: person, ignore: true}
+    tram:           null   # no COCO equivalent -> dropped
+    misc:           null
+  # How predictions from a KITTI-label model (fine-tuned / open-vocab) map into the COCO taxonomy
+  kitti_pred_to_coco: {car: 3, van: 3, truck: 8, pedestrian: 1, person_sitting: 1}
+
+models:
+  yolo11s:
+    family: "YOLO (one-stage, anchor-free, NMS)"
+    impl: ultralytics
+    weights: weights/yolo11s.pt
+    imgsz: 640
+    label_space: coco
+    reference_coco_map: 47.0     # Ultralytics docs, COCO val2017 mAP50-95
+  rtdetr_l:
+    family: "DETR (query-based, NMS-free)"
+    impl: ultralytics_rtdetr
+    weights: weights/rtdetr-l.pt
+    imgsz: 640
+    label_space: coco
+    reference_coco_map: 53.0     # RT-DETR paper / Ultralytics docs
+  frcnn_r50_v2:
+    family: "Two-stage, anchor-based (Faster R-CNN)"
+    impl: torchvision
+    arch: fasterrcnn_resnet50_fpn_v2
+    imgsz: "min800/max1333"      # torchvision GeneralizedRCNNTransform default
+    label_space: coco
+    reference_coco_map: 46.7     # torchvision weights table
+  fcos_r50:
+    family: "One-stage, anchor-free, dense (FCOS)"
+    impl: torchvision
+    arch: fcos_resnet50_fpn
+    imgsz: "min800/max1333"
+    label_space: coco
+    reference_coco_map: 39.2     # torchvision weights table
+  yoloworld_s:
+    family: "Open-vocabulary (YOLO-World, text-prompted)"
+    impl: ultralytics_world
+    weights: weights/yolov8s-worldv2.pt
+    imgsz: 640
+    label_space: prompt          # classes come from the prompt list per dataset
+    reference_coco_map: null
+  yolo11s_kitti_ft:
+    family: "YOLO (fine-tuned on KITTI train)"
+    impl: ultralytics
+    weights: runs/finetune/yolo11s_kitti/weights/best.pt
+    imgsz: 640
+    label_space: kitti
+    reference_coco_map: null
+
+prompts:
+  coco: coco80                   # special value -> the 80 COCO class names
+  kitti: [car, van, truck, pedestrian, person sitting, cyclist, tram]
+
+finetune:
+  base_weights: weights/yolo11s.pt
+  epochs: 50
+  imgsz: 640
+  batch: 16
+  workers: 4                     # lower to 0-2 if Windows dataloader misbehaves
+  patience: 15
+  name: yolo11s_kitti
+
+# Every (model, dataset) pair to run. 'evals' = which GT taxonomies to score against.
+runs:
+  - {model: yolo11s,      dataset: coco,  evals: [coco]}
+  - {model: rtdetr_l,     dataset: coco,  evals: [coco]}
+  - {model: frcnn_r50_v2, dataset: coco,  evals: [coco]}
+  - {model: fcos_r50,     dataset: coco,  evals: [coco]}
+  - {model: yoloworld_s,  dataset: coco,  evals: [coco]}
+  - {model: yolo11s,      dataset: kitti, evals: [kitti_cocomap]}
+  - {model: rtdetr_l,     dataset: kitti, evals: [kitti_cocomap]}
+  - {model: frcnn_r50_v2, dataset: kitti, evals: [kitti_cocomap]}
+  - {model: fcos_r50,     dataset: kitti, evals: [kitti_cocomap]}
+  - {model: yoloworld_s,  dataset: kitti, evals: [kitti_cocomap, kitti_native]}
+  - {model: yolo11s,      dataset: kitti, evals: [kitti_cocomap], imgsz: 1280, tag: "res1280"}   # resolution ablation
+  - {model: yolo11s_kitti_ft, dataset: kitti, evals: [kitti_cocomap, kitti_native], needs_finetune: true}
+
+benchmark:
+  models: [yolo11s, rtdetr_l, frcnn_r50_v2, fcos_r50, yoloworld_s]
+  datasets: [coco, kitti]
+  n_images: 200
+  warmup: 20
+
+quick:            # used by `python run_all.py --quick` (smoke test, minutes not hours)
+  n_images: 25
+  finetune_epochs: 1
+  finetune_fraction: 0.05
+  benchmark_images: 10
+  benchmark_warmup: 2
