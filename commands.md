@@ -6,3 +6,7 @@
     python -c "import torch; print(torch.cuda.is_available(), torch.cuda.get_device_name(0))"   # True NVIDIA GeForce RTX 5070 Ti
     pip install git+https://github.com/ultralytics/CLIP.git tabulate
     gh repo create CMPE_249_HW1 --private --source=. --remote=origin
+    pip install pyyaml        # ultralytics 8.4.197 no longer pulls PyYAML in; scripts/common.py needs it
+
+## Stage 1 - smoke test
+    python run_all.py --quick

@@ -42,3 +42,4 @@ ultralytics-platform==0.1.102
 ultralytics-thop==2.2.4
 urllib3==2.8.0
 wheel==0.48.0
+PyYAML==6.0.3
