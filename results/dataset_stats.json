@@ -1,0 +1,46 @@
+{
+  "native": {
+    "car": 5716,
+    "cyclist": 352,
+    "pedestrian": 921,
+    "person_sitting": 36,
+    "tram": 117,
+    "truck": 223,
+    "van": 555
+  },
+  "native_scale": {
+    "car/large": 1723,
+    "car/medium": 3044,
+    "car/small": 949,
+    "cyclist/large": 55,
+    "cyclist/medium": 220,
+    "cyclist/small": 77,
+    "pedestrian/large": 214,
+    "pedestrian/medium": 530,
+    "pedestrian/small": 177,
+    "person_sitting/large": 20,
+    "person_sitting/medium": 14,
+    "person_sitting/small": 2,
+    "tram/large": 52,
+    "tram/medium": 60,
+    "tram/small": 5,
+    "truck/large": 56,
+    "truck/medium": 133,
+    "truck/small": 34,
+    "van/large": 162,
+    "van/medium": 300,
+    "van/small": 93
+  },
+  "cocomap": {
+    "car->car": 5716,
+    "pedestrian->person": 921,
+    "truck->truck": 223
+  },
+  "cocomap_ignored": {
+    "cyclist->person": 352,
+    "person_sitting->person": 36,
+    "van->car": 555
+  },
+  "n_val_images": 1496,
+  "n_train_images": 5985
+}

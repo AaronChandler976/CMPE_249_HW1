@@ -35,3 +35,6 @@
 {"time": "2026-11-01T15:51:06", "event": "failure_analysis", "argv": "finetune.py --quick", "cwd": "<repo>", "run": "yolo11s_kitti_ft__kitti", "target": "kitti_cocomap", "counts": {"FN": 42, "FP-class": 3, "TP": 32, "FP-background": 25, "FP-loc": 3}}
 {"time": "2026-11-01T15:51:08", "event": "analyze", "argv": "finetune.py --quick", "cwd": "<repo>", "n_metric_files": 14}
 {"time": "2026-11-01T15:51:08", "event": "run_all_done", "argv": "sanity_checks.py --quick", "cwd": "<repo>", "minutes": 2.5, "sanity_exit": 0}
+{"time": "2026-11-01T15:56:55", "event": "run_all_start", "argv": "run_all.py --stages prepare", "cwd": "<repo>", "quick": false, "stages": ["prepare"]}
+{"time": "2026-11-01T15:57:16", "event": "prepare_data", "argv": "prepare_data.py", "cwd": "<repo>", "quick": false, "only": null}
+{"time": "2026-11-01T15:57:16", "event": "run_all_done", "argv": "prepare_data.py", "cwd": "<repo>", "minutes": 0.4, "sanity_exit": 0}
