@@ -102,7 +102,7 @@ person, car and truck are scored, and every COCO&rarr;KITTI comparison uses <b>t
 <div class="cap"><b>Table 2.</b> KITTI&rarr;COCO mapping (<code>configs/experiments.yaml: taxonomy</code>, <code>docs/taxonomy_mapping.md</code>). 6,860 boxes are scored and 943 are ignore regions. Models that output KITTI labels (YOLO-World with KITTI prompts, the fine-tuned model) map van&rarr;car and person_sitting&rarr;person, and are also scored on all 7 native classes.</div>
 
 <h2>3. Experimental setup and hardware</h2>
-<p><b>Hardware/software.</b> NVIDIA GeForce RTX 5070 Ti (16 GB, driver 617.42), AMD CPU, Windows 11 (WDDM
+<p><b>Hardware/software.</b> NVIDIA GeForce RTX 5070 Ti (16 GB, driver 617.42), AMD Ryzen 9 9900X CPU (12 cores / 24 threads), 64 GB RAM, Windows 11 (WDDM
 driver model); Python 3.12.16, PyTorch 2.11.0+cu128, torchvision 0.26.0, CUDA 12.8, cuDNN 9.19, Ultralytics
 8.4.197, pycocotools 2.0.11. Full versions are captured automatically in every <code>results/run_meta/*.json</code>.</p>
 <p><b>Inference and evaluation.</b> All models use conf&nbsp;=&nbsp;0.001, NMS IoU&nbsp;=&nbsp;0.7 (not used by RT-DETR)
@@ -110,7 +110,8 @@ and max 300 detections per image. A low confidence threshold is required for mAP
 0.25 would cut the precision&ndash;recall curve short and lower AP. Metrics are COCO-style AP@[.5:.95] (the mean
 of AP at IoU 0.50, 0.55, &hellip;, 0.95, each AP being the area under a 101-point interpolated
 precision&ndash;recall curve), AP50, AP75, AP<sub>S/M/L</sub>, AR100 and per-class AP, all from pycocotools [17]. Inference
-is FP16 except FCOS, which runs in FP32 (Section 8). Qualitative and failure analysis uses conf&nbsp;=&nbsp;0.30.</p>
+is FP16 except FCOS, which runs in FP32 (Section 8). Qualitative and failure analysis uses conf&nbsp;=&nbsp;0.30. YOLO-World prompts: the 80 COCO class names on COCO, and
+<code>car, van, truck, pedestrian, person sitting, cyclist, tram</code> on KITTI (<code>configs/experiments.yaml: prompts</code>).</p>
 <p><b>Latency protocol.</b> Batch 1, images preloaded in RAM, end-to-end time (preprocess + network + NMS) with
 <code>torch.cuda.synchronize()</code>. There are 200 untimed warm-up images, so every input shape has been seen
 once, followed by 3 timed passes over 200 images. The reported latency is the median of the three pass means,
@@ -118,7 +119,7 @@ with the min&ndash;max range. Peak memory is <code>torch.cuda.max_memory_allocat
 <p><b>Fine-tuning.</b> YOLO11s initialised from COCO weights, 50 epochs, image size 640, batch 16, early-stop
 patience 15, seed 0, deterministic, Ultralytics default optimiser and augmentation. All 50 epochs ran, taking
 1,490 s (24.8 min). The best checkpoint by Ultralytics validation was the last epoch, so selecting it on the val
-split gave no extra advantage (<code>results/metrics/finetune/results.csv</code>).</p>
+split gave no extra advantage (<code>results/metrics/finetune/results.csv</code>, Figure 4b).</p>
 
 <h2>4. Commands and configuration</h2>
 <p>One config file (<code>configs/experiments.yaml</code>) defines every model, threshold, mapping and run. One
@@ -136,16 +137,16 @@ python run_all.py --stages benchmark failures analyze sanity # latency/memory, e
 <p>Table 3 lists every run. Read the two COCO AP columns first: they show that the harness reproduces the
 published numbers, which is the precondition for trusting the KITTI columns.</p>
 <table>
-<tr><th>Model</th><th>COCO AP<br>(published)</th><th>COCO AP<br>(ours)</th><th>COCO AP50</th><th>COCO 3-cls AP</th><th>KITTI AP</th><th>95% CI</th><th>KITTI AP50</th><th>KITTI AP75</th><th>KITTI AP<sub>S</sub></th><th>KITTI AP<sub>L</sub></th><th>KITTI AR100</th></tr>
-<tr><td>YOLO11s</td><td>47.0</td><td>45.6</td><td>62.3</td><td>46.4</td><td>24.6</td><td style="white-space:nowrap">23.6&ndash;26.4</td><td>48.2</td><td>22.5</td><td>14.0</td><td>36.8</td><td>42.7</td></tr>
-<tr><td>RT-DETR-L</td><td>53.0</td><td>52.8</td><td>71.2</td><td>52.6</td><td>29.0</td><td style="white-space:nowrap">27.5&ndash;31.1</td><td>53.8</td><td>27.4</td><td>22.4</td><td>40.9</td><td>55.6</td></tr>
-<tr><td>Faster R-CNN v2</td><td>46.7</td><td>47.0</td><td>68.1</td><td>50.8</td><td>28.3</td><td style="white-space:nowrap">26.9&ndash;30.3</td><td>54.4</td><td>27.3</td><td>15.3</td><td>40.0</td><td>54.7</td></tr>
-<tr><td>FCOS</td><td>39.2</td><td>39.3</td><td>58.7</td><td>43.4</td><td>28.7</td><td style="white-space:nowrap">27.1&ndash;30.7</td><td>54.5</td><td>27.4</td><td>21.0</td><td>38.5</td><td>53.8</td></tr>
-<tr><td>YOLO-World-S v2</td><td>37.7</td><td>36.8</td><td>51.3</td><td>41.6</td><td>28.8</td><td style="white-space:nowrap">27.4&ndash;31.0</td><td>50.0</td><td>29.5</td><td>23.7</td><td>42.4</td><td>54.0</td></tr>
-<tr><td>YOLO11s @1280</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>26.9</td><td style="white-space:nowrap">25.6&ndash;28.8</td><td>51.0</td><td>25.1</td><td>21.9</td><td>36.3</td><td>47.0</td></tr>
-<tr><td>YOLO11s-KITTI (fine-tuned)</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td><b>71.6</b></td><td style="white-space:nowrap">70.3&ndash;72.9</td><td><b>93.0</b></td><td><b>80.2</b></td><td><b>58.3</b></td><td><b>80.7</b></td><td><b>77.1</b></td></tr>
+<tr><th>Model</th><th>COCO AP<br>(published)</th><th>COCO AP<br>(ours)</th><th>COCO AP50</th><th>COCO 3-cls AP</th><th>KITTI AP</th><th>95% CI</th><th>KITTI AP50</th><th>KITTI AP75</th><th>KITTI AP<sub>S</sub></th><th>KITTI AP<sub>M</sub></th><th>KITTI AP<sub>L</sub></th><th>KITTI AR100</th></tr>
+<tr><td>YOLO11s</td><td>47.0</td><td>45.6</td><td>62.3</td><td>46.4</td><td>24.6</td><td style="white-space:nowrap">23.6&ndash;26.4</td><td>48.2</td><td>22.5</td><td>14.0</td><td>22.2</td><td>36.8</td><td>42.7</td></tr>
+<tr><td>RT-DETR-L</td><td>53.0</td><td>52.8</td><td>71.2</td><td>52.6</td><td>29.0</td><td style="white-space:nowrap">27.5&ndash;31.1</td><td>53.8</td><td>27.4</td><td>22.4</td><td>27.6</td><td>40.9</td><td>55.6</td></tr>
+<tr><td>Faster R-CNN v2</td><td>46.7</td><td>47.0</td><td>68.1</td><td>50.8</td><td>28.3</td><td style="white-space:nowrap">26.9&ndash;30.3</td><td>54.4</td><td>27.3</td><td>15.3</td><td>26.9</td><td>40.0</td><td>54.7</td></tr>
+<tr><td>FCOS</td><td>39.2</td><td>39.3</td><td>58.7</td><td>43.4</td><td>28.7</td><td style="white-space:nowrap">27.1&ndash;30.7</td><td>54.5</td><td>27.4</td><td>21.0</td><td>27.5</td><td>38.5</td><td>53.8</td></tr>
+<tr><td>YOLO-World-S v2</td><td>37.7</td><td>36.8</td><td>51.3</td><td>41.6</td><td>28.8</td><td style="white-space:nowrap">27.4&ndash;31.0</td><td>50.0</td><td>29.5</td><td>23.7</td><td>26.4</td><td>42.4</td><td>54.0</td></tr>
+<tr><td>YOLO11s @1280</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>26.9</td><td style="white-space:nowrap">25.6&ndash;28.8</td><td>51.0</td><td>25.1</td><td>21.9</td><td>25.2</td><td>36.3</td><td>47.0</td></tr>
+<tr><td>YOLO11s-KITTI (fine-tuned)</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td><b>71.6</b></td><td style="white-space:nowrap">70.3&ndash;72.9</td><td><b>93.0</b></td><td><b>80.2</b></td><td><b>58.3</b></td><td><b>71.4</b></td><td><b>80.7</b></td><td><b>77.1</b></td></tr>
 </table>
-<div class="cap"><b>Table 3.</b> Main results (AP@[.5:.95] in %, unless noted). COCO: 80 classes, 5,000 images. KITTI: person/car/truck, 1,496 val images, zero-shot except the last row. Every published COCO mAP is reproduced to within 1.4 AP, which validates id mapping, coordinates and thresholds before any KITTI number is interpreted. Bold = best in column (the fine-tuned model). 95% CI = percentile interval from 1,000 image-level bootstrap resamples of KITTI val (<code>results/tables/bootstrap_ci.md</code>); paired comparisons are in &sect;6.2. Source: <code>results/tables/main_results.md</code>, <code>results/sanity_report.md</code>.</div>
+<div class="cap"><b>Table 3.</b> Main results (AP@[.5:.95] in %, unless noted). COCO: 80 classes, 5,000 images. KITTI: person/car/truck, 1,496 val images, zero-shot except the last row. Every published COCO mAP is reproduced to within 1.4 AP, which validates id mapping, coordinates and thresholds before any KITTI number is interpreted. The largest gap (YOLO11s, &minus;1.4) is inside the 2-AP tolerance; its cause was not investigated (candidates: differences between Ultralytics' own validator and this harness, and FP16). Bold = best in column (the fine-tuned model). 95% CI = percentile interval from 1,000 image-level bootstrap [19] resamples of KITTI val (<code>results/tables/bootstrap_ci.md</code>); paired comparisons are in &sect;6.2. Source: <code>results/tables/main_results.md</code>, <code>results/sanity_report.md</code>.</div>
 
 <h2>6. Analyses</h2>
 <h3>6.1 Cross-dataset generalization: which classes and scales degrade?</h3>
@@ -194,7 +195,7 @@ reported only as a sensitivity analysis.</p>
 <p><b>Scale.</b> A common expectation is that KITTI is hard because its objects are small. The data do not support
 this as the main explanation (Figure 2). <i>Medium and large</i> objects lose 32&ndash;60% of their COCO AP for every
 model (medium 45&ndash;60%, large 32&ndash;47%), and most KITTI ground truth is medium. Small objects vary widely, from
-2% for YOLO-World (24.0&rarr;23.7) to 58% for Faster R-CNN (36.3&rarr;15.3). Doubling the input resolution of YOLO11s
+1% for YOLO-World (24.0&rarr;23.7) to 58% for Faster R-CNN (36.3&rarr;15.3). Doubling the input resolution of YOLO11s
 to 1280 (Table 6) raises AP<sub>S</sub> by 7.9 points, but leaves AP<sub>L</sub> flat and recovers only 2.3 AP
 overall. Pixels help small objects, but most of the gap lies elsewhere.</p>
 <figure><img src="../../results/figures/domain_shift_scale.png" alt="AP by object scale"></figure>
@@ -237,8 +238,8 @@ transfers best overall (smallest drop, &minus;12.8; best truck and small-object 
 (12.8), and on native KITTI classes it reaches only 15.3 AP: pedestrian 7.1, cyclist 2.2, person_sitting 0.3,
 tram 7.4. <b>The prompt word matters.</b> Replacing "pedestrian" with "person", with identical weights, raises person AP
 from 12.8 to 17.5 (AP50 32.9&rarr;45.7), and removing the competing "person sitting"/"cyclist" prompts adds only 0.5
-more (<code>results/metrics/diagnostics/yoloworld_prompts.txt</code>). "Person" is much more common than
-"pedestrian" in image&ndash;text training data, so it is plausibly a better-aligned text embedding. The reported
+more (<code>results/metrics/diagnostics/yoloworld_prompts.txt</code>). One untested hypothesis is that "person" is far more frequent than
+"pedestrian" in image&ndash;text training data, giving it a better-aligned text embedding. The reported
 results keep the original prompts, since choosing prompts on the evaluation set would be tuning on test data.
 Open vocabulary therefore buys flexibility and robustness for familiar objects, but not accuracy on
 domain-specific categories (cyclist, tram).</p>
@@ -257,10 +258,10 @@ domain-specific categories (cyclist, tram).</p>
 </table>
 <div class="cap"><b>Table 8.</b> Fine-tuning (<code>results/tables/finetune.md</code>, <code>results/failures/*/summary.json</code>). For comparison, YOLO-World zero-shot reaches 15.3 native 7-class AP. *Counts at a fixed confidence depend on score calibration, which fine-tuning changes, so they illustrate the shift; the AP rows are the threshold-free comparison. Native per-class AP of the fine-tuned model: car 80.9, van 77.1, truck 83.9, pedestrian 49.7, person_sitting 43.3, cyclist 60.4, tram 74.9.</div>
 </div>
-<figure style="flex:1"><img src="../../results/figures/finetune_native.png" alt="Native KITTI per-class AP"><div class="cap"><b>Figure 4.</b> Native 7-class AP: open-vocabulary zero-shot vs fine-tuned.</div></figure>
+<figure style="flex:1"><img src="../../results/figures/finetune_native.png" alt="Native KITTI per-class AP"><div class="cap"><b>Figure 4a.</b> Native 7-class AP: open-vocabulary zero-shot vs fine-tuned.</div></figure>
 </div>
-<p>As Table 8 and Figure 4 show, 25 minutes of fine-tuning almost triples KITTI AP. The <i>same</i> YOLO11s network
-(only the class head changes) goes from the worst zero-shot model to far ahead of every other model. Truck jumps
+<p>As Table 8 and Figure 4a show, 25 minutes of fine-tuning almost triples KITTI AP. The <i>same</i> YOLO11s network
+(all weights are fine-tuned; the only architectural change is the output layer, resized from 80 to 7 classes) goes from the worst zero-shot model to far ahead of every other model. Truck jumps
 from 9.0 to 83.9, and AP75 from 22.5 to 80.2. Our interpretation is that the zero-shot gap is mainly a <b>mismatch
 of label definitions, box conventions and domain appearance</b> (what counts as a truck vs a van, how tightly a
 pedestrian is boxed, KITTI's camera and scenes), not a lack of model capacity. Fine-tuning changes all of these at
@@ -268,11 +269,14 @@ once, so this experiment cannot separate them. Architecture choices moved KITTI 
 data moved it by 47. <b>Caveat:</b> train and val share no files, but KITTI frames are sampled from
 driving sequences, so frames of the same drive very likely appear in both splits. 71.6 is therefore an optimistic
 estimate compared with a sequence-level split.</p>
+<div class="blk"><figure style="width:70%;margin:4pt auto 0"><img src="../../results/figures/finetune_curve.png" alt="Fine-tuning validation curve"></figure>
+<div class="cap"><b>Figure 4b.</b> Ultralytics' per-epoch validation mAP (7 native classes, its own evaluator, so not identical to the pycocotools numbers above) (<code>results/metrics/finetune/results.csv</code>). mAP@[.5:.95] was still rising slowly at the end (67.0 at epoch 40, 68.3 at epoch 50) while the learning rate decayed towards zero, so longer training might add a little; 50 epochs is a budget choice, not a converged optimum.</div></div>
 
 <h2>7. Failure analysis</h2>
 <p>Each prediction (conf&nbsp;&ge;&nbsp;0.3) and GT box was classified with a light TIDE-style [12] taxonomy at IoU 0.5:
 TP, FP-duplicate, FP-class (confusion), FP-loc (0.1&le;IoU&lt;0.5), FP-background (IoU&lt;0.1) and FN (missed), with
-predictions on ignore regions skipped (Table 9).</p>
+predictions on ignore regions skipped (Table 9). It covers one zero-shot model from each closed-set family studied
+(one-stage YOLO, DETR-style, two-stage) plus the fine-tuned model; FCOS and YOLO-World were not run through it.</p>
 <table>
 <tr><th>Run (KITTI val, conf 0.3)</th><th>TP</th><th>FN (missed)</th><th>FP-background</th><th>FP-loc</th><th>FP-class</th><th>FP-dup</th><th>Recall person/small</th><th>Recall truck/medium</th></tr>
 <tr><td>YOLO11s zero-shot</td><td>4,998</td><td>1,862</td><td>1,182</td><td>760</td><td>55</td><td>134</td><td>0.14</td><td>0.24</td></tr>
@@ -341,6 +345,7 @@ fine-tuning run (seed 0), and only the smallest YOLO size was fine-tuned.</p>
 <li>PyTorch. torchvision.models: object detection weights table. https://docs.pytorch.org/vision/stable/models.html</li>
 <li>COCO API (pycocotools), official repository. https://github.com/cocodataset/cocoapi</li>
 <li>Ultralytics. KITTI dataset documentation. https://docs.ultralytics.com/datasets/detect/kitti/</li>
+<li>B. Efron, R. J. Tibshirani. <i>An Introduction to the Bootstrap</i>. Chapman &amp; Hall/CRC, 1993.</li>
 </ol>
 
 <p class="note"><b>Reproducibility and AI-tool use.</b> Every measured number in this report is read from files

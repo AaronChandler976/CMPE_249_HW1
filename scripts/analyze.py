@@ -3,7 +3,7 @@
   python scripts/analyze.py
 
 Tables  results/tables/{main_results,benchmark,domain_shift,domain_shift_scale,finetune,resolution}.{csv,md}
-Figures results/figures/{speed_accuracy,domain_shift_per_class,domain_shift_scale,finetune_native}.png
+Figures results/figures/{speed_accuracy,domain_shift_per_class,domain_shift_scale,finetune_native,finetune_curve}.png
 
 Fairness note baked in: COCO "3-class AP" = mean of person/car/truck AP on COCO, so the
 COCO->KITTI comparison uses the same classes on both sides (80-class mAP vs 3-class mAP is unfair).
@@ -220,6 +220,20 @@ def main() -> None:
         ax.legend(frameon=False, labelcolor=INK2)
         fig.tight_layout()
         fig.savefig(FIG_DIR / "finetune_native.png", dpi=200)
+        plt.close(fig)
+
+    # ---------------- fine-tuning curve (Ultralytics' own per-epoch validation, 7 native classes)
+    curve = METRIC_DIR / "finetune" / "results.csv"
+    if curve.exists():
+        h = pd.read_csv(curve)
+        h.columns = [c.strip() for c in h.columns]
+        fig, ax = plt.subplots(figsize=(7.5, 3.6), facecolor=SURFACE)
+        ax.plot(h["epoch"], 100 * h["metrics/mAP50-95(B)"], color=BLUE, lw=2, label="mAP@[.5:.95]")
+        ax.plot(h["epoch"], 100 * h["metrics/mAP50(B)"], color=ORANGE, lw=2, label="mAP@.5")
+        style(ax, "YOLO11s fine-tuning on KITTI: validation mAP per epoch", "epoch", "val mAP (%)")
+        ax.legend(frameon=False, labelcolor=INK2)
+        fig.tight_layout()
+        fig.savefig(FIG_DIR / "finetune_curve.png", dpi=200)
         plt.close(fig)
 
     # ---------------- resolution ablation
