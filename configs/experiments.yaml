@@ -75,6 +75,7 @@ models:
     family: "One-stage, anchor-free, dense (FCOS)"
     impl: torchvision
     arch: fcos_resnet50_fpn
+    half: false                  # FP16 autocast costs ~7 AP on COCO (31.3 vs 39.2 ref); see lab_notebook stage 3
     imgsz: "min800/max1333"
     label_space: coco
     reference_coco_map: 39.2     # torchvision weights table
@@ -84,7 +85,7 @@ models:
     weights: weights/yolov8s-worldv2.pt
     imgsz: 640
     label_space: prompt          # classes come from the prompt list per dataset
-    reference_coco_map: null
+    reference_coco_map: 37.7     # Ultralytics YOLO-World docs, "Zero-shot Transfer on COCO", yolov8s-worldv2
   yolo11s_kitti_ft:
     family: "YOLO (fine-tuned on KITTI train)"
     impl: ultralytics

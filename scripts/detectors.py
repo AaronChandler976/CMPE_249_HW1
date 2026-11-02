@@ -26,7 +26,7 @@ class UltralyticsDetector:
         cls = {"ultralytics": YOLO, "ultralytics_rtdetr": RTDETR, "ultralytics_world": YOLOWorld}[impl]
         self.model = cls(str(w))
         self.dev, self.imgsz, self.thr = dev, imgsz, thr
-        self.half = bool(cfg["half"]) and dev != "cpu"
+        self.half = bool(mcfg.get("half", cfg["half"])) and dev != "cpu"   # per-model override
         kitti_names = cfg["taxonomy"]["kitti_classes"]
 
         if impl == "ultralytics_world":
@@ -90,7 +90,7 @@ class TorchvisionDetector:
         self.device = torch_device(dev)
         self.dev = dev
         self.model.eval().to(self.device)
-        self.half = bool(cfg["half"]) and dev != "cpu"
+        self.half = bool(mcfg.get("half", cfg["half"])) and dev != "cpu"   # per-model override
         self.label_space = "coco"           # torchvision labels ARE COCO category ids
         self.nms = True
 

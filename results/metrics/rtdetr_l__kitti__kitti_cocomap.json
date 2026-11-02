@@ -1,0 +1,53 @@
+{
+  "run": "rtdetr_l__kitti",
+  "target": "kitti_cocomap",
+  "model": "rtdetr_l",
+  "dataset": "kitti",
+  "imgsz": 640,
+  "n_images": 1496,
+  "n_dets_scored": 263012,
+  "stats": {
+    "AP": 28.99,
+    "AP50": 53.76,
+    "AP75": 27.39,
+    "AP_small": 22.39,
+    "AP_medium": 27.56,
+    "AP_large": 40.88,
+    "AR1": 23.7,
+    "AR10": 51.2,
+    "AR100": 55.58,
+    "AR_small": 52.69,
+    "AR_medium": 53.21,
+    "AR_large": 63.41
+  },
+  "per_class": {
+    "person": {
+      "AP": 20.058679353054394,
+      "AP50": 53.90903325312817,
+      "AP75": 10.289874497453155,
+      "AP_small": 2.9633912053837244,
+      "AP_medium": 18.434649714954045,
+      "AP_large": 34.99649578740694,
+      "n_gt": 921
+    },
+    "car": {
+      "AP": 49.51724515932897,
+      "AP50": 82.67263800446825,
+      "AP75": 52.238252901739536,
+      "AP_small": 34.362499956531515,
+      "AP_medium": 45.742545608331675,
+      "AP_large": 61.97568608605849,
+      "n_gt": 5716
+    },
+    "truck": {
+      "AP": 17.384504296427398,
+      "AP50": 24.699423180798306,
+      "AP75": 19.649130328319668,
+      "AP_small": 29.857362238394323,
+      "AP_medium": 18.4986113024384,
+      "AP_large": 25.655092351260066,
+      "n_gt": 223
+    }
+  },
+  "pycocotools_summary": "Running per image evaluation...\nEvaluate annotation type *bbox*\nDONE (t=5.33s).\nAccumulating evaluation results...\nDONE (t=0.86s).\n Average Precision  (AP) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.290\n Average Precision  (AP) @[ IoU=0.50      | area=   all | maxDets=100 ] = 0.538\n Average Precision  (AP) @[ IoU=0.75      | area=   all | maxDets=100 ] = 0.274\n Average Precision  (AP) @[ IoU=0.50:0.95 | area= small | maxDets=100 ] = 0.224\n Average Precision  (AP) @[ IoU=0.50:0.95 | area=medium | maxDets=100 ] = 0.276\n Average Precision  (AP) @[ IoU=0.50:0.95 | area= large | maxDets=100 ] = 0.409\n Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=  1 ] = 0.237\n Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets= 10 ] = 0.512\n Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.556\n Average Recall     (AR) @[ IoU=0.50:0.95 | area= small | maxDets=100 ] = 0.527\n Average Recall     (AR) @[ IoU=0.50:0.95 | area=medium | maxDets=100 ] = 0.532\n Average Recall     (AR) @[ IoU=0.50:0.95 | area= large | maxDets=100 ] = 0.634\n"
+}

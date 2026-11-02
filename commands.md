@@ -13,3 +13,13 @@
 
 ## Stage 2 - data
     python run_all.py --stages prepare
+    rm -rf results/predictions results/run_meta results/metrics results/failures runs/finetune   # (run by Aaron) clear smoke-test artefacts
+
+## Stage 3 - zero-shot predictions + evaluation
+    python run_all.py --stages predict evaluate
+    python <scratchpad>/diag_fcos.py 500 fcos_r50      # diagnosis: FCOS FP16 vs FP32 x thresholds, 500 COCO imgs (not in repo)
+    # fix: configs/experiments.yaml models.fcos_r50.half: false  (+ per-model `half` override in scripts/detectors.py)
+    python scripts/predict.py --model fcos_r50 --dataset coco
+    python scripts/predict.py --model fcos_r50 --dataset kitti
+    python scripts/evaluate.py --run fcos_r50__coco --target coco
+    python scripts/evaluate.py --run fcos_r50__kitti --target kitti_cocomap

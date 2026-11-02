@@ -38,3 +38,32 @@
 {"time": "2026-11-01T15:56:55", "event": "run_all_start", "argv": "run_all.py --stages prepare", "cwd": "<repo>", "quick": false, "stages": ["prepare"]}
 {"time": "2026-11-01T15:57:16", "event": "prepare_data", "argv": "prepare_data.py", "cwd": "<repo>", "quick": false, "only": null}
 {"time": "2026-11-01T15:57:16", "event": "run_all_done", "argv": "prepare_data.py", "cwd": "<repo>", "minutes": 0.4, "sanity_exit": 0}
+{"time": "2026-11-01T16:00:26", "event": "run_all_start", "argv": "run_all.py --stages predict evaluate", "cwd": "<repo>", "quick": false, "stages": ["predict", "evaluate"]}
+{"time": "2026-11-01T16:02:12", "event": "predict", "argv": "run_all.py --stages predict evaluate", "cwd": "<repo>", "run": "yolo11s__coco", "n_images": 5000, "wall_time_s": 101.5}
+{"time": "2026-11-01T16:03:49", "event": "predict", "argv": "run_all.py --stages predict evaluate", "cwd": "<repo>", "run": "rtdetr_l__coco", "n_images": 5000, "wall_time_s": 89.9}
+{"time": "2026-11-01T16:05:44", "event": "predict", "argv": "run_all.py --stages predict evaluate", "cwd": "<repo>", "run": "frcnn_r50_v2__coco", "n_images": 5000, "wall_time_s": 109.4}
+{"time": "2026-11-01T16:08:06", "event": "predict", "argv": "run_all.py --stages predict evaluate", "cwd": "<repo>", "run": "fcos_r50__coco", "n_images": 5000, "wall_time_s": 134.1}
+{"time": "2026-11-01T16:08:59", "event": "predict", "argv": "run_all.py --stages predict evaluate", "cwd": "<repo>", "run": "yoloworld_s__coco", "n_images": 5000, "wall_time_s": 46.7}
+{"time": "2026-11-01T16:09:11", "event": "predict", "argv": "run_all.py --stages predict evaluate", "cwd": "<repo>", "run": "yolo11s__kitti", "n_images": 1496, "wall_time_s": 11.6}
+{"time": "2026-11-01T16:09:39", "event": "predict", "argv": "run_all.py --stages predict evaluate", "cwd": "<repo>", "run": "rtdetr_l__kitti", "n_images": 1496, "wall_time_s": 25.2}
+{"time": "2026-11-01T16:10:07", "event": "predict", "argv": "run_all.py --stages predict evaluate", "cwd": "<repo>", "run": "frcnn_r50_v2__kitti", "n_images": 1496, "wall_time_s": 26.5}
+{"time": "2026-11-01T16:10:41", "event": "predict", "argv": "run_all.py --stages predict evaluate", "cwd": "<repo>", "run": "fcos_r50__kitti", "n_images": 1496, "wall_time_s": 31.4}
+{"time": "2026-11-01T16:10:58", "event": "predict", "argv": "run_all.py --stages predict evaluate", "cwd": "<repo>", "run": "yoloworld_s__kitti", "n_images": 1496, "wall_time_s": 14.7}
+{"time": "2026-11-01T16:11:15", "event": "predict", "argv": "run_all.py --stages predict evaluate", "cwd": "<repo>", "run": "yolo11s__kitti__res1280", "n_images": 1496, "wall_time_s": 15.5}
+{"time": "2026-11-01T16:11:36", "event": "evaluate", "argv": "run_all.py --stages predict evaluate", "cwd": "<repo>", "run": "yolo11s__coco", "target": "coco", "AP": 45.63}
+{"time": "2026-11-01T16:12:18", "event": "evaluate", "argv": "run_all.py --stages predict evaluate", "cwd": "<repo>", "run": "rtdetr_l__coco", "target": "coco", "AP": 52.75}
+{"time": "2026-11-01T16:12:52", "event": "evaluate", "argv": "run_all.py --stages predict evaluate", "cwd": "<repo>", "run": "frcnn_r50_v2__coco", "target": "coco", "AP": 47.01}
+{"time": "2026-11-01T16:13:33", "event": "evaluate", "argv": "run_all.py --stages predict evaluate", "cwd": "<repo>", "run": "fcos_r50__coco", "target": "coco", "AP": 31.28}
+{"time": "2026-11-01T16:14:01", "event": "evaluate", "argv": "run_all.py --stages predict evaluate", "cwd": "<repo>", "run": "yoloworld_s__coco", "target": "coco", "AP": 36.77}
+{"time": "2026-11-01T16:14:05", "event": "evaluate", "argv": "run_all.py --stages predict evaluate", "cwd": "<repo>", "run": "yolo11s__kitti", "target": "kitti_cocomap", "AP": 24.59}
+{"time": "2026-11-01T16:14:13", "event": "evaluate", "argv": "run_all.py --stages predict evaluate", "cwd": "<repo>", "run": "rtdetr_l__kitti", "target": "kitti_cocomap", "AP": 28.99}
+{"time": "2026-11-01T16:14:19", "event": "evaluate", "argv": "run_all.py --stages predict evaluate", "cwd": "<repo>", "run": "frcnn_r50_v2__kitti", "target": "kitti_cocomap", "AP": 28.32}
+{"time": "2026-11-01T16:14:26", "event": "evaluate", "argv": "run_all.py --stages predict evaluate", "cwd": "<repo>", "run": "fcos_r50__kitti", "target": "kitti_cocomap", "AP": 28.62}
+{"time": "2026-11-01T16:14:30", "event": "evaluate", "argv": "run_all.py --stages predict evaluate", "cwd": "<repo>", "run": "yoloworld_s__kitti", "target": "kitti_cocomap", "AP": 28.8}
+{"time": "2026-11-01T16:14:34", "event": "evaluate", "argv": "run_all.py --stages predict evaluate", "cwd": "<repo>", "run": "yoloworld_s__kitti", "target": "kitti_native", "AP": 15.35}
+{"time": "2026-11-01T16:14:39", "event": "evaluate", "argv": "run_all.py --stages predict evaluate", "cwd": "<repo>", "run": "yolo11s__kitti__res1280", "target": "kitti_cocomap", "AP": 26.86}
+{"time": "2026-11-01T16:14:39", "event": "run_all_done", "argv": "run_all.py --stages predict evaluate", "cwd": "<repo>", "minutes": 14.2, "sanity_exit": 0}
+{"time": "2026-11-01T16:19:38", "event": "predict", "argv": "scripts/predict.py --model fcos_r50 --dataset coco", "cwd": "<repo>", "run": "fcos_r50__coco", "n_images": 5000, "wall_time_s": 137.5}
+{"time": "2026-11-01T16:20:14", "event": "predict", "argv": "scripts/predict.py --model fcos_r50 --dataset kitti", "cwd": "<repo>", "run": "fcos_r50__kitti", "n_images": 1496, "wall_time_s": 30.1}
+{"time": "2026-11-01T16:20:57", "event": "evaluate", "argv": "scripts/evaluate.py --run fcos_r50__coco --target coco", "cwd": "<repo>", "run": "fcos_r50__coco", "target": "coco", "AP": 39.33}
+{"time": "2026-11-01T16:21:06", "event": "evaluate", "argv": "scripts/evaluate.py --run fcos_r50__kitti --target kitti_cocomap", "cwd": "<repo>", "run": "fcos_r50__kitti", "target": "kitti_cocomap", "AP": 28.73}
