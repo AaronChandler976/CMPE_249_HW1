@@ -17,7 +17,7 @@
 
 ## Stage 3 - zero-shot predictions + evaluation
     python run_all.py --stages predict evaluate
-    python <scratchpad>/diag_fcos.py 500 fcos_r50      # diagnosis: FCOS FP16 vs FP32 x thresholds, 500 COCO imgs (not in repo)
+    python scripts/diagnostics/diag_fcos.py 500 fcos_r50      # diagnosis: FCOS FP16 vs FP32 x thresholds, 500 COCO imgs
     # fix: configs/experiments.yaml models.fcos_r50.half: false  (+ per-model `half` override in scripts/detectors.py)
     python scripts/predict.py --model fcos_r50 --dataset coco
     python scripts/predict.py --model fcos_r50 --dataset kitti
@@ -30,7 +30,7 @@
 
 ## Stage 5 - benchmark, failures, tables, sanity
     python run_all.py --stages benchmark failures analyze sanity
-    python <scratchpad>/diag_bench.py yolo11s   # diagnosis: per-shape first-call cost (not in repo)
+    python scripts/diagnostics/diag_bench.py yolo11s   # diagnosis: per-shape first-call cost
     # fix: configs/experiments.yaml benchmark.warmup 20 -> 200
     python run_all.py --stages benchmark analyze sanity
     # fix: benchmark.repeats 3 (median of pass means) - scripts/benchmark.py
@@ -38,5 +38,5 @@
     python scripts/analyze.py   # + pass_range_ms column
 
 ## Stage 6 - findings
-    python <scratchpad>/truck_on_van.py   # diagnostic: confident truck boxes landing on KITTI vans (not in repo)
+    python scripts/diagnostics/truck_on_van.py   # diagnostic: confident truck boxes landing on KITTI vans
     # wrote docs/findings.md

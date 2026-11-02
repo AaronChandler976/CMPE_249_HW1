@@ -4,7 +4,7 @@ Every number below comes from a file in `results/` produced by this pipeline (sa
 109 PASS / 0 WARN / 0 FAIL). "KITTI AP" = AP@[.5:.95] on KITTI val (1,496 imgs) mapped to COCO
 {person, car, truck}; "COCO 3-cls AP" = the same three classes on COCO val2017, so the two are
 comparable (`docs/taxonomy_mapping.md`). Two numbers (F4, F7) come from one-off diagnostic
-scripts. They are marked as such, and the scripts and commands are in `commands.md`.
+scripts. They are marked as such, and the scripts are in `scripts/diagnostics/`, commands in `commands.md`.
 
 ---
 
@@ -34,7 +34,7 @@ category), so every van called "truck" is a truck false positive. YOLO-World, pr
 explicit "van" class, puts 68 boxes on vans and has the best truck precision (99/220 = 45 %) and the
 best KITTI truck AP (27.7, almost no drop from 29.2 on COCO).
 **Source:** truck AP from `results/tables/domain_shift.md`. Box counts from the diagnostic
-`truck_on_van.py` (commands.md, stage 6) over `results/predictions/*.json` + KITTI native GT.
+`scripts/diagnostics/truck_on_van.py` over `results/predictions/*.json` + KITTI native GT.
 **Open decision for Aaron (taxonomy change, so not applied):** also marking Van as an ignore region
 for `truck` would measure "truck skill" without the van ambiguity. Report it as a sensitivity check
 if we run it; it must not silently replace the main mapping.
@@ -105,7 +105,8 @@ torchvision preprocessing, input size) are part of what is measured.
    images FP16 vs FP32 was 36.2 vs 43.1, and thresholds changed < 0.3 AP. *Hypothesis:* the damage
    is concentrated in the other 77 COCO classes. FCOS scores are sqrt(cls x centerness), and
    half precision may reorder the many near-tied low scores. *Verify:* run
-   `diag_fcos.py` on 500 COCO imgs and compare per-class AP (person/car/truck vs the rest) for FP16 vs FP32.
+   `python scripts/diagnostics/diag_fcos.py 500`, extended to print per-class AP, and compare
+   person/car/truck vs the other 77 classes for FP16 vs FP32.
 2. **Car AP is *higher* on KITTI than COCO for FCOS (+4.0) and YOLO-World (+6.7).** *Hypothesis:*
    KITTI cars are canonical (rear/side views, road context, little clutter), and vans, the main
    ambiguous case, are ignored. *Verify:* rerun the car eval with Van scored as car instead of
