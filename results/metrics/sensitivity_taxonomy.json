@@ -1,0 +1,149 @@
+{
+  "note": "sensitivity only; main results use variant 'main'",
+  "rows": [
+    {
+      "run": "yolo11s__kitti",
+      "variant": "main",
+      "AP": 24.6,
+      "AP_person": 19.5,
+      "AP_car": 45.3,
+      "AP_truck": 9.0
+    },
+    {
+      "run": "yolo11s__kitti",
+      "variant": "van_ign_trk",
+      "AP": 26.5,
+      "AP_person": 19.5,
+      "AP_car": 45.3,
+      "AP_truck": 14.7
+    },
+    {
+      "run": "yolo11s__kitti",
+      "variant": "van_as_car",
+      "AP": 24.1,
+      "AP_person": 19.5,
+      "AP_car": 43.8,
+      "AP_truck": 9.0
+    },
+    {
+      "run": "rtdetr_l__kitti",
+      "variant": "main",
+      "AP": 29.0,
+      "AP_person": 20.1,
+      "AP_car": 49.5,
+      "AP_truck": 17.4
+    },
+    {
+      "run": "rtdetr_l__kitti",
+      "variant": "van_ign_trk",
+      "AP": 32.7,
+      "AP_person": 20.1,
+      "AP_car": 49.5,
+      "AP_truck": 28.5
+    },
+    {
+      "run": "rtdetr_l__kitti",
+      "variant": "van_as_car",
+      "AP": 28.5,
+      "AP_person": 20.1,
+      "AP_car": 48.1,
+      "AP_truck": 17.4
+    },
+    {
+      "run": "frcnn_r50_v2__kitti",
+      "variant": "main",
+      "AP": 28.3,
+      "AP_person": 20.5,
+      "AP_car": 46.4,
+      "AP_truck": 18.1
+    },
+    {
+      "run": "frcnn_r50_v2__kitti",
+      "variant": "van_ign_trk",
+      "AP": 30.6,
+      "AP_person": 20.5,
+      "AP_car": 46.4,
+      "AP_truck": 25.0
+    },
+    {
+      "run": "frcnn_r50_v2__kitti",
+      "variant": "van_as_car",
+      "AP": 27.7,
+      "AP_person": 20.5,
+      "AP_car": 44.6,
+      "AP_truck": 18.1
+    },
+    {
+      "run": "fcos_r50__kitti",
+      "variant": "main",
+      "AP": 28.7,
+      "AP_person": 20.2,
+      "AP_car": 46.4,
+      "AP_truck": 19.7
+    },
+    {
+      "run": "fcos_r50__kitti",
+      "variant": "van_ign_trk",
+      "AP": 31.5,
+      "AP_person": 20.2,
+      "AP_car": 46.4,
+      "AP_truck": 27.9
+    },
+    {
+      "run": "fcos_r50__kitti",
+      "variant": "van_as_car",
+      "AP": 28.4,
+      "AP_person": 20.2,
+      "AP_car": 45.3,
+      "AP_truck": 19.7
+    },
+    {
+      "run": "yoloworld_s__kitti",
+      "variant": "main",
+      "AP": 28.8,
+      "AP_person": 12.8,
+      "AP_car": 45.9,
+      "AP_truck": 27.7
+    },
+    {
+      "run": "yoloworld_s__kitti",
+      "variant": "van_ign_trk",
+      "AP": 31.9,
+      "AP_person": 12.8,
+      "AP_car": 45.9,
+      "AP_truck": 36.9
+    },
+    {
+      "run": "yoloworld_s__kitti",
+      "variant": "van_as_car",
+      "AP": 28.6,
+      "AP_person": 12.8,
+      "AP_car": 45.3,
+      "AP_truck": 27.7
+    },
+    {
+      "run": "yolo11s_kitti_ft__kitti",
+      "variant": "main",
+      "AP": 71.6,
+      "AP_person": 49.8,
+      "AP_car": 80.9,
+      "AP_truck": 83.9
+    },
+    {
+      "run": "yolo11s_kitti_ft__kitti",
+      "variant": "van_ign_trk",
+      "AP": 71.6,
+      "AP_person": 49.8,
+      "AP_car": 80.9,
+      "AP_truck": 83.9
+    },
+    {
+      "run": "yolo11s_kitti_ft__kitti",
+      "variant": "van_as_car",
+      "AP": 71.5,
+      "AP_person": 49.8,
+      "AP_car": 80.8,
+      "AP_truck": 83.9
+    }
+  ]
+}

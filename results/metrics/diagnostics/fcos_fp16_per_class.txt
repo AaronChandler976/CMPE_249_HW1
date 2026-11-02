@@ -1,0 +1,5 @@
+# python scripts/diagnostics/diag_fcos.py 5000 fcos_r50 --per-class   (2026-11-01, COCO val2017 full)
+fcos_r50 | fp16 conf0.001 max300 (original)   | AP=31.3 AP50=45.6 dets/img=300 | person 53.4 car 42.2 truck 34.3 | other-77 mean 30.8 (n=77)
+fcos_r50 | fp32 conf0.001 max300              | AP=39.3 AP50=58.7 dets/img=300 | person 53.5 car 42.4 truck 34.3 | other-77 mean 39.2 (n=77)
+fcos_r50 | fp16 tv-default 0.2/100            | AP=31.1 AP50=45.2 dets/img=69 | person 52.9 car 42.1 truck 34.0 | other-77 mean 30.6 (n=77)
+fcos_r50 | fp32 tv-default 0.2/100            | AP=39.1 AP50=58.2 dets/img=56 | person 53.3 car 42.2 truck 34.1 | other-77 mean 39.0 (n=77)

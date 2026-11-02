@@ -40,3 +40,9 @@
 ## Stage 6 - findings
     python scripts/diagnostics/truck_on_van.py   # diagnostic: confident truck boxes landing on KITTI vans
     # wrote docs/findings.md
+
+## Stage 7 - verification / sensitivity experiments (main results unchanged)
+    python scripts/diagnostics/sensitivity_taxonomy.py                  # Van ignored for truck too / Van scored as car
+    python scripts/diagnostics/diag_fcos.py 5000 fcos_r50 --per-class   # FP16 loss by class, full COCO
+    python scripts/diagnostics/yoloworld_prompts.py                     # "pedestrian" vs "person" prompt
+    # outputs saved to results/metrics/diagnostics/*.txt and results/tables/sensitivity_taxonomy.md

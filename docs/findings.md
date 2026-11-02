@@ -29,15 +29,21 @@ the closed-set models (RT-DETR 46.1 -> 17.4).
 ## F3. Much of the truck drop comes from KITTI's Van class, a side effect of the taxonomy
 Of the confident (score >= 0.3) `truck` boxes the closed-set models output on KITTI,
 **34-48 % land on a KITTI Van** (YOLO11s 157/328, RT-DETR 399/1,172, Faster R-CNN 312/819;
-FCOS 551/3,298 = 17 %, but FCOS outputs far more truck boxes overall). Only 6-20 % hit a real truck. Vans are ignore regions for `car` only (pycocotools ignores per
-category), so every van called "truck" is a truck false positive. YOLO-World, prompted with an
-explicit "van" class, puts 68 boxes on vans and has the best truck precision (99/220 = 45 %) and the
-best KITTI truck AP (27.7, almost no drop from 29.2 on COCO).
-**Source:** truck AP from `results/tables/domain_shift.md`. Box counts from the diagnostic
-`scripts/diagnostics/truck_on_van.py` over `results/predictions/*.json` + KITTI native GT.
-**Open decision for Aaron (taxonomy change, so not applied):** also marking Van as an ignore region
-for `truck` would measure "truck skill" without the van ambiguity. Report it as a sensitivity check
-if we run it; it must not silently replace the main mapping.
+FCOS 551/3,298 = 17 %, but FCOS outputs far more truck boxes overall). Only 6-20 % hit a real
+truck. Vans are ignore regions for `car` only (pycocotools ignores per category), so every van
+called "truck" is a truck false positive.
+**Sensitivity check (main mapping unchanged):** making Van an ignore region for truck as well raises
+truck AP for **every** zero-shot model: YOLO11s 9.0 -> 14.7, RT-DETR 17.4 -> 28.5, Faster R-CNN
+18.1 -> 25.0, FCOS 19.7 -> 27.9, YOLO-World 27.7 -> 36.9 (3-class AP +1.9 to +3.7). The fine-tuned
+model is unchanged (83.9): it learned van vs truck.
+**Correction to an earlier hypothesis:** YOLO-World's explicit "van" prompt does *not* explain its
+truck lead. It gains as much as the others (+9.2) and still leads afterwards (36.9 vs 28.5).
+Its truck advantage has another, untested cause.
+**Even with vans ignored, truck still drops a lot** for the closed-set models (RT-DETR 46.1 -> 28.5).
+Van confusion is a large part of the truck drop, not all of it.
+**Source:** truck AP from `results/tables/domain_shift.md`, sensitivity from
+`results/tables/sensitivity_taxonomy.md` (`scripts/diagnostics/sensitivity_taxonomy.py`). Box
+counts from `scripts/diagnostics/truck_on_van.py` over `results/predictions/*.json` + KITTI native GT.
 
 ## F4. Drops happen at every object scale, so the shift is not only "KITTI objects are small"
 COCO 3-cls -> KITTI AP for **large** objects drops nearly as much as for small ones: YOLO11s 69.6 ->
@@ -99,22 +105,28 @@ torchvision preprocessing, input size) are part of what is measured.
 
 ---
 
-## Surprises, with explanations you can verify
+## Surprises, with the verification experiments run on 2026-11-01
+Raw outputs: `results/metrics/diagnostics/*.txt`, `results/tables/sensitivity_taxonomy.md`.
 
-1. **FP16 cost FCOS 7.9 AP on COCO (31.3 vs 39.3) but ~0 on KITTI (28.6 vs 28.7).** On 500 COCO
-   images FP16 vs FP32 was 36.2 vs 43.1, and thresholds changed < 0.3 AP. *Hypothesis:* the damage
-   is concentrated in the other 77 COCO classes. FCOS scores are sqrt(cls x centerness), and
-   half precision may reorder the many near-tied low scores. *Verify:* run
-   `python scripts/diagnostics/diag_fcos.py 500`, extended to print per-class AP, and compare
-   person/car/truck vs the other 77 classes for FP16 vs FP32.
-2. **Car AP is *higher* on KITTI than COCO for FCOS (+4.0) and YOLO-World (+6.7).** *Hypothesis:*
-   KITTI cars are canonical (rear/side views, road context, little clutter), and vans, the main
-   ambiguous case, are ignored. *Verify:* rerun the car eval with Van scored as car instead of
-   ignored (sensitivity only). Car AP should then drop.
-3. **YOLO-World has the worst KITTI person AP (12.8) but the best truck AP (27.7).** *Hypothesis:*
-   the prompt word "pedestrian" is a weaker CLIP text embedding than "person", which COCO
-   captions use far more often. *Verify:* change `prompts.kitti` to use "person" instead of
-   "pedestrian" and re-run `yoloworld_s` on KITTI (~1 min).
+1. **FP16 cost FCOS 7.9 AP on COCO (31.3 vs 39.3) but ~0 on KITTI (28.6 vs 28.7). CONFIRMED:
+   the loss is entirely outside person/car/truck.** Full COCO val, FP16 vs FP32: person 53.4/53.5,
+   car 42.2/42.4, truck 34.3/34.3, while the mean AP of the other 77 classes is **30.8 vs 39.2**
+   (-8.4). Thresholds change < 0.3 AP. KITTI scores only the three unaffected classes, so it did not
+   move. *Still untested:* why only those classes suffer. A plausible guess is that half precision
+   reorders near-tied low scores, which matter most for classes with weaker evidence.
+   (`python scripts/diagnostics/diag_fcos.py 5000 fcos_r50 --per-class`)
+2. **Car AP is *higher* on KITTI than COCO for FCOS (+4.0) and YOLO-World (+6.7). MOSTLY NOT
+   explained by ignoring vans.** Scoring Van as car lowers KITTI car AP by only 0.6-1.8 (FCOS
+   46.4 -> 45.3, YOLO-World 45.9 -> 45.3), so both stay above their COCO car AP (42.4, 39.2).
+   *Remaining hypothesis (untested):* KITTI cars are canonical (rear/side views, road context,
+   little clutter), while COCO "car" covers odd views, crowds and partial cars.
+   (`results/tables/sensitivity_taxonomy.md`)
+3. **YOLO-World's worst-in-class person AP (12.8) is partly the prompt word. CONFIRMED, partly.**
+   Same weights, prompt "person" instead of "pedestrian": person AP 12.8 -> **17.5** (AP50 32.9 ->
+   45.7), 3-class AP 28.8 -> 30.1. Removing the competing "person sitting"/"cyclist" prompts adds
+   only +0.5 more (18.0). It still trails the closed-set models (~20), and the pipeline keeps the
+   original prompts (changing them after seeing results would be tuning on the test set).
+   (`python scripts/diagnostics/yoloworld_prompts.py`)
 4. **The first benchmark reported YOLO11s at 56.5 ms on COCO, 10x its real cost.** This was a
    one-time setup cost for each new input shape (9/200 imgs up to 1,046 ms, gone on a second
    pass), fixed with warmup = 200 + 3 repeats. Worth one sentence in the report's method section:

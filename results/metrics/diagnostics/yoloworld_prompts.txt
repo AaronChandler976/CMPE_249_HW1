@@ -1,0 +1,4 @@
+# python scripts/diagnostics/yoloworld_prompts.py   (2026-11-01, KITTI val, kitti_cocomap)
+baseline (pipeline)    | AP=28.8 | person 12.8 (AP50 32.9) car 45.9 truck 27.7
+pedestrian->person     | AP=30.1 | person 17.5 (AP50 45.7) car 45.5 truck 27.3
+4 prompts, person      | AP=30.4 | person 18.0 (AP50 47.6) car 45.4 truck 27.7

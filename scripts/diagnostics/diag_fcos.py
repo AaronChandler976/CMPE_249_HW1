@@ -15,11 +15,13 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from common import load_cfg, p, resolve_device  # noqa: E402
 from detectors import build_detector  # noqa: E402
-from evaluate import coco_eval  # noqa: E402
+from evaluate import coco_eval, per_class  # noqa: E402
 from predict import dataset_images  # noqa: E402
 
-N = int(sys.argv[1]) if len(sys.argv) > 1 else 500
-MODEL = sys.argv[2] if len(sys.argv) > 2 else "fcos_r50"
+PER_CLASS = "--per-class" in sys.argv          # also print person/car/truck AP + mean AP of the other 77
+args = [a for a in sys.argv[1:] if a != "--per-class"]
+N = int(args[0]) if len(args) > 0 else 500
+MODEL = args[1] if len(args) > 1 else "fcos_r50"
 cfg0 = load_cfg()
 dev = resolve_device(cfg0["device"])
 imgs, img_dir = dataset_images(cfg0, "coco", N)
@@ -43,7 +45,13 @@ for name, (half, thr) in variants.items():
             dets.append({"image_id": r["id"], "category_id": int(cc),
                          "bbox": [float(x1), float(y1), float(x2 - x1), float(y2 - y1)],
                          "score": float(sc)})
-    E, _, _ = coco_eval(p(cfg["datasets"]["coco"]["gt"]), dets, ids)
+    E, gt, _ = coco_eval(p(cfg["datasets"]["coco"]["gt"]), dets, ids)
+    extra = ""
+    if PER_CLASS:
+        pc = per_class(E, gt)
+        rest = [v["AP"] for k, v in pc.items() if k not in ("person", "car", "truck") and v["AP"] == v["AP"]]
+        extra = (f" | person {pc['person']['AP']:.1f} car {pc['car']['AP']:.1f} "
+                 f"truck {pc['truck']['AP']:.1f} | other-77 mean {sum(rest) / len(rest):.1f} (n={len(rest)})")
     print(f"{MODEL} | {name:34s} | AP={E.stats[0]*100:.1f} AP50={E.stats[1]*100:.1f} "
-          f"dets/img={len(dets)/len(imgs):.0f}", flush=True)
+          f"dets/img={len(dets)/len(imgs):.0f}{extra}", flush=True)
     del det
