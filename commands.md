@@ -23,3 +23,4 @@
     python scripts/predict.py --model fcos_r50 --dataset kitti
     python scripts/evaluate.py --run fcos_r50__coco --target coco
     python scripts/evaluate.py --run fcos_r50__kitti --target kitti_cocomap
+    python scripts/analyze.py      # regenerate tables/figures from full-run metrics

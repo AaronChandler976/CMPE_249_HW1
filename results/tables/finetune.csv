@@ -1,6 +1,4 @@
 model,eval,AP,AP50,AP_S,AP_person,AP_car,AP_truck
-YOLO11s zero-shot (COCO weights),kitti_cocomap (3 cls),33.94,53.74,16.75,32.44404837205643,49.49604010140099,19.887788778877884
-YOLO-World zero-shot (text prompts),kitti_cocomap (3 cls),41.55,61.41,41.47,31.348057882711345,49.303547527693716,43.98932750417898
-YOLO11s fine-tuned on KITTI,kitti_cocomap (3 cls),12.68,21.28,12.75,0.0,35.54205011522182,2.495049504950495
-YOLO-World zero-shot,kitti_native (7 cls),24.01,34.34,24.97,,,
-YOLO11s fine-tuned,kitti_native (7 cls),6.35,10.72,7.65,,,
+YOLO11s zero-shot (COCO weights),kitti_cocomap (3 cls),24.59,48.25,14.02,19.457073744104253,45.332986318890555,8.969574988845247
+YOLO-World zero-shot (text prompts),kitti_cocomap (3 cls),28.8,49.97,23.66,12.803893442155632,45.89527260337024,27.68804441726504
+YOLO-World zero-shot,kitti_native (7 cls),15.35,26.89,11.25,,,

@@ -67,3 +67,4 @@
 {"time": "2026-11-01T16:20:14", "event": "predict", "argv": "scripts/predict.py --model fcos_r50 --dataset kitti", "cwd": "<repo>", "run": "fcos_r50__kitti", "n_images": 1496, "wall_time_s": 30.1}
 {"time": "2026-11-01T16:20:57", "event": "evaluate", "argv": "scripts/evaluate.py --run fcos_r50__coco --target coco", "cwd": "<repo>", "run": "fcos_r50__coco", "target": "coco", "AP": 39.33}
 {"time": "2026-11-01T16:21:06", "event": "evaluate", "argv": "scripts/evaluate.py --run fcos_r50__kitti --target kitti_cocomap", "cwd": "<repo>", "run": "fcos_r50__kitti", "target": "kitti_cocomap", "AP": 28.73}
+{"time": "2026-11-01T16:21:42", "event": "analyze", "argv": "scripts/analyze.py", "cwd": "<repo>", "n_metric_files": 12}
