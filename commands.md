@@ -36,3 +36,7 @@
     # fix: benchmark.repeats 3 (median of pass means) - scripts/benchmark.py
     python run_all.py --stages benchmark analyze sanity
     python scripts/analyze.py   # + pass_range_ms column
+
+## Stage 6 - findings
+    python <scratchpad>/truck_on_van.py   # diagnostic: confident truck boxes landing on KITTI vans (not in repo)
+    # wrote docs/findings.md
