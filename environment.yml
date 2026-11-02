@@ -1,4 +1,4 @@
-name: CMPE249-hw1
+name: detection-transfer
 channels:
   - conda-forge
 dependencies:

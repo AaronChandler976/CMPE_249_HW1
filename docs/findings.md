@@ -4,7 +4,7 @@ Every number below comes from a file in `results/` produced by this pipeline (sa
 109 PASS / 0 WARN / 0 FAIL). "KITTI AP" = AP@[.5:.95] on KITTI val (1,496 imgs) mapped to COCO
 {person, car, truck}; "COCO 3-cls AP" = the same three classes on COCO val2017, so the two are
 comparable (`docs/taxonomy_mapping.md`). Two numbers (F4, F7) come from one-off diagnostic
-scripts. They are marked as such, and the scripts are in `scripts/diagnostics/`, commands in `commands.md`.
+scripts. They are marked as such, and the scripts are in `scripts/diagnostics/`, commands in `docs/commands.md`.
 
 ---
 
@@ -59,7 +59,7 @@ annotation/definition differences (F2, F3, F6) rather than resolution.
 
 ## F5. COCO rankings do not transfer: an 11-pt spread on COCO's 3 classes shrinks to 4.4 pts on KITTI
 (Corrected after review: an earlier version compared the 80-class COCO spread, 16 pts, with 3-class
-KITTI, which is exactly the unfair comparison CLAUDE.md forbids.)
+KITTI, which is exactly the unfair comparison the method rules out.)
 COCO 3-cls AP ranges 41.6 (YOLO-World) to 52.6 (RT-DETR-L). KITTI AP ranges 24.6 (YOLO11s) to
 29.0 (RT-DETR-L). A paired image bootstrap (B=1000) finds RT-DETR, Faster R-CNN, FCOS and YOLO-World
 **statistically tied** on KITTI (all differences vs RT-DETR have 95 % CIs containing 0, e.g. YOLO-World

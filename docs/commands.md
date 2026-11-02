@@ -49,9 +49,10 @@
 
 ## Report
     # docs/report/report.html -> PDF via headless Edge:
-    msedge --headless=new --no-pdf-header-footer --print-to-pdf=docs/report/CMPE249_HW1_Report.pdf docs/report/report.html
+    msedge --headless=new --no-pdf-header-footer --print-to-pdf=docs/report/report.pdf docs/report/report.html
     python scripts/diagnostics/bootstrap_ci.py 1000      # 95% image-bootstrap CIs + paired diffs vs RT-DETR-L
     python scripts/diagnostics/diag_bench.py yolo11s     # re-run, saved to results/metrics/diagnostics/bench_warmup.txt
     # report revised after rubric-reviewer pass; PDF re-printed with headless Edge (see Report above)
     python scripts/analyze.py                            # adds results/figures/finetune_curve.png (Fig. 4b)
-    # second revision after a first-pass review against ASSIGNMENT.md (10 fixes); PDF re-printed, 9 pages
+    # second revision after a first-pass review against the assignment (10 fixes); PDF re-printed, 9 pages
+    # repo cleanup: README rewrite, MIT LICENSE, assistant tooling and study notes untracked, repo renamed to zero-shot-detection-transfer

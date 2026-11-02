@@ -14,5 +14,19 @@ __pycache__/
 .claude/settings.local.json
 .env
 
-# test leftovers from the first YOLO tutorial
+
+# generated, machine-specific (absolute paths)
+configs/kitti_local.yaml
+
+# local-only: assistant tooling and personal study notes
+CLAUDE.md
+KICKOFF_PROMPT.md
+.claude/
+claude_setup/
+setup_windows.ps1
+ASSIGNMENT.md
+docs/defense_notes.md
+docs/lab_notebook.md
+
+# stray test image
 bus.jpg
