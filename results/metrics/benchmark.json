@@ -1,0 +1,318 @@
+{
+  "env": {
+    "timestamp": "2026-11-01T17:03:24",
+    "os": "Windows-11-10.0.26300-SP0",
+    "python": "3.12.16",
+    "torch": "2.11.0+cu128",
+    "torchvision": "0.26.0+cu128",
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "cudnn": 91900,
+    "cpu": "AMD64 Family 26 Model 68 Stepping 0, AuthenticAMD",
+    "ultralytics": "8.4.197",
+    "pycocotools": "2.0.11",
+    "gpu": "NVIDIA GeForce RTX 5070 Ti",
+    "gpu_mem_gb": 15.9,
+    "driver": "617.42"
+  },
+  "rows": [
+    {
+      "model": "yolo11s",
+      "dataset": "coco",
+      "imgsz": 640,
+      "n_images": 200,
+      "warmup": 200,
+      "device": "0",
+      "half": true,
+      "repeats": 3,
+      "pass_means_ms": [
+        7.1970490000421705,
+        7.620956999890041,
+        6.900850499951048
+      ],
+      "latency_ms_mean": 7.1970490000421705,
+      "latency_ms_p50": 6.64485000197601,
+      "latency_ms_p90": 11.722010000812588,
+      "fps": 138.94583738336928,
+      "breakdown_ms": {
+        "total_ms": 7.239618833294419,
+        "preprocess_ms": 0.2924050000304608,
+        "inference_ms": 5.84048849999211,
+        "postprocess_ms": 0.9630171667534645
+      },
+      "peak_mem_mb": 71.203125,
+      "params_m": 9.458752
+    },
+    {
+      "model": "rtdetr_l",
+      "dataset": "coco",
+      "imgsz": 640,
+      "n_images": 200,
+      "warmup": 200,
+      "device": "0",
+      "half": true,
+      "repeats": 3,
+      "pass_means_ms": [
+        13.71005149994744,
+        18.76564350006447,
+        16.719216499968752
+      ],
+      "latency_ms_mean": 16.719216499968752,
+      "latency_ms_p50": 16.506149999258923,
+      "latency_ms_p90": 25.13291999894136,
+      "fps": 59.81141520608151,
+      "breakdown_ms": {
+        "total_ms": 16.39830383332689,
+        "preprocess_ms": 0.9207730000040707,
+        "inference_ms": 14.88980733326874,
+        "postprocess_ms": 0.42710983339929953
+      },
+      "peak_mem_mb": 143.17919921875,
+      "params_m": 32.970476
+    },
+    {
+      "model": "frcnn_r50_v2",
+      "dataset": "coco",
+      "imgsz": "min800/max1333",
+      "n_images": 200,
+      "warmup": 200,
+      "device": "0",
+      "half": true,
+      "repeats": 3,
+      "pass_means_ms": [
+        19.34866100014915,
+        19.67842100009875,
+        19.40537399988898
+      ],
+      "latency_ms_mean": 19.40537399988898,
+      "latency_ms_p50": 19.52050000181771,
+      "latency_ms_p90": 20.382460002292646,
+      "fps": 51.53211682525269,
+      "breakdown_ms": {
+        "total_ms": 19.47748533337896,
+        "preprocess_ms": 0.6799246666620699,
+        "inference_ms": 18.708895000011882,
+        "postprocess_ms": 0.08866566670500713
+      },
+      "peak_mem_mb": 637.0615234375,
+      "params_m": 43.712278
+    },
+    {
+      "model": "fcos_r50",
+      "dataset": "coco",
+      "imgsz": "min800/max1333",
+      "n_images": 200,
+      "warmup": 200,
+      "device": "0",
+      "half": false,
+      "repeats": 3,
+      "pass_means_ms": [
+        25.561397000110446,
+        25.500452499818493,
+        26.20382500010237
+      ],
+      "latency_ms_mean": 25.561397000110446,
+      "latency_ms_p50": 26.033150001239846,
+      "latency_ms_p90": 26.99347999987367,
+      "fps": 39.121492459730554,
+      "breakdown_ms": {
+        "total_ms": 25.75522483334377,
+        "preprocess_ms": 0.6822041666358322,
+        "inference_ms": 24.985669333242793,
+        "postprocess_ms": 0.08735133346514583
+      },
+      "peak_mem_mb": 501.1044921875,
+      "params_m": 32.2696
+    },
+    {
+      "model": "yoloworld_s",
+      "dataset": "coco",
+      "imgsz": 640,
+      "n_images": 200,
+      "warmup": 200,
+      "device": "0",
+      "half": true,
+      "repeats": 3,
+      "pass_means_ms": [
+        6.396678499822883,
+        6.1571280001044215,
+        6.201893000124983
+      ],
+      "latency_ms_mean": 6.201893000124983,
+      "latency_ms_p50": 6.036250000761356,
+      "latency_ms_p90": 7.075099998837686,
+      "fps": 161.2410920310698,
+      "breakdown_ms": {
+        "total_ms": 6.2518998333507625,
+        "preprocess_ms": 0.27193383328873705,
+        "inference_ms": 5.063837000028191,
+        "postprocess_ms": 0.7677201666592737
+      },
+      "peak_mem_mb": 81.224609375,
+      "params_m": 12.75988
+    },
+    {
+      "model": "yolo11s",
+      "dataset": "kitti",
+      "imgsz": 640,
+      "n_images": 200,
+      "warmup": 200,
+      "device": "0",
+      "half": true,
+      "repeats": 3,
+      "pass_means_ms": [
+        4.977868999885686,
+        4.997287999976834,
+        4.997625999931188
+      ],
+      "latency_ms_mean": 4.997287999976834,
+      "latency_ms_p50": 4.978300001312164,
+      "latency_ms_p90": 5.104079999728128,
+      "fps": 200.10853887241154,
+      "breakdown_ms": {
+        "total_ms": 4.990927666597902,
+        "preprocess_ms": 0.3196510000392057,
+        "inference_ms": 3.8537840000086967,
+        "postprocess_ms": 0.6804268331567679
+      },
+      "peak_mem_mb": 71.55078125,
+      "params_m": 9.458752
+    },
+    {
+      "model": "rtdetr_l",
+      "dataset": "kitti",
+      "imgsz": 640,
+      "n_images": 200,
+      "warmup": 200,
+      "device": "0",
+      "half": true,
+      "repeats": 3,
+      "pass_means_ms": [
+        12.239528500067536,
+        12.216468500064366,
+        12.269023999888304
+      ],
+      "latency_ms_mean": 12.239528500067536,
+      "latency_ms_p50": 12.213250001877896,
+      "latency_ms_p90": 12.447920000340673,
+      "fps": 81.70249368629537,
+      "breakdown_ms": {
+        "total_ms": 12.241673666673401,
+        "preprocess_ms": 0.8598645000529359,
+        "inference_ms": 10.931028999978784,
+        "postprocess_ms": 0.30253466659511713
+      },
+      "peak_mem_mb": 173.40869140625,
+      "params_m": 32.970476
+    },
+    {
+      "model": "frcnn_r50_v2",
+      "dataset": "kitti",
+      "imgsz": "min800/max1333",
+      "n_images": 200,
+      "warmup": 200,
+      "device": "0",
+      "half": true,
+      "repeats": 3,
+      "pass_means_ms": [
+        16.245868499972858,
+        16.621417999886035,
+        16.431165000103647
+      ],
+      "latency_ms_mean": 16.431165000103647,
+      "latency_ms_p50": 16.23864999965008,
+      "latency_ms_p90": 16.5743100016698,
+      "fps": 60.85995728201208,
+      "breakdown_ms": {
+        "total_ms": 16.43281716665418,
+        "preprocess_ms": 1.317807499981427,
+        "inference_ms": 15.025856500063432,
+        "postprocess_ms": 0.08915316660932149
+      },
+      "peak_mem_mb": 488.06494140625,
+      "params_m": 43.712278
+    },
+    {
+      "model": "fcos_r50",
+      "dataset": "kitti",
+      "imgsz": "min800/max1333",
+      "n_images": 200,
+      "warmup": 200,
+      "device": "0",
+      "half": false,
+      "repeats": 3,
+      "pass_means_ms": [
+        18.66802150007061,
+        18.81033350024154,
+        19.193307500045194
+      ],
+      "latency_ms_mean": 18.81033350024154,
+      "latency_ms_p50": 18.5594000013225,
+      "latency_ms_p90": 19.611670001904713,
+      "fps": 53.162268493919,
+      "breakdown_ms": {
+        "total_ms": 18.89055416678578,
+        "preprocess_ms": 1.318609833415394,
+        "inference_ms": 17.48075466666099,
+        "postprocess_ms": 0.09118966670939699
+      },
+      "peak_mem_mb": 391.01171875,
+      "params_m": 32.2696
+    },
+    {
+      "model": "yoloworld_s",
+      "dataset": "kitti",
+      "imgsz": 640,
+      "n_images": 200,
+      "warmup": 200,
+      "device": "0",
+      "half": true,
+      "repeats": 3,
+      "pass_means_ms": [
+        5.419092000120145,
+        5.414940500049852,
+        5.422245499885321
+      ],
+      "latency_ms_mean": 5.419092000120145,
+      "latency_ms_p50": 5.408450000686571,
+      "latency_ms_p90": 5.520209998940118,
+      "fps": 184.5327593585474,
+      "breakdown_ms": {
+        "total_ms": 5.4187593333517725,
+        "preprocess_ms": 0.3184363332123515,
+        "inference_ms": 4.291588166755294,
+        "postprocess_ms": 0.6712801666435553
+      },
+      "peak_mem_mb": 143.48681640625,
+      "params_m": 12.75988
+    },
+    {
+      "model": "yolo11s",
+      "dataset": "kitti",
+      "imgsz": 1280,
+      "n_images": 200,
+      "warmup": 200,
+      "device": "0",
+      "half": true,
+      "repeats": 3,
+      "pass_means_ms": [
+        5.607498500030488,
+        5.603480499867146,
+        5.609852999969007
+      ],
+      "latency_ms_mean": 5.607498500030488,
+      "latency_ms_p50": 5.5940499987627845,
+      "latency_ms_p90": 5.736780000370345,
+      "fps": 178.33263798368614,
+      "breakdown_ms": {
+        "total_ms": 5.606943999955547,
+        "preprocess_ms": 0.9123313332869051,
+        "inference_ms": 3.8353585000307553,
+        "postprocess_ms": 0.7178210000771893
+      },
+      "peak_mem_mb": 79.119140625,
+      "params_m": 9.458752,
+      "tag": "res1280"
+    }
+  ]
+}

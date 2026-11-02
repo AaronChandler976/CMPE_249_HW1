@@ -1,0 +1,59 @@
+{
+  "run": "frcnn_r50_v2__kitti",
+  "target": "kitti_cocomap",
+  "conf": 0.3,
+  "iou": 0.5,
+  "counts": {
+    "TP": 5728,
+    "FP-background": 8193,
+    "ignored": 957,
+    "FP-loc": 2179,
+    "FN": 1132,
+    "FP-duplicate": 119,
+    "FP-class": 132
+  },
+  "fn_by_class_scale": {
+    "person/small": 95,
+    "car/small": 94,
+    "truck/small": 12,
+    "car/large": 176,
+    "car/medium": 456,
+    "truck/medium": 74,
+    "person/medium": 166,
+    "person/large": 42,
+    "truck/large": 17
+  },
+  "gt_by_class_scale": {
+    "person/large": 214,
+    "truck/small": 34,
+    "car/small": 949,
+    "car/medium": 3044,
+    "person/small": 177,
+    "car/large": 1723,
+    "truck/medium": 133,
+    "person/medium": 530,
+    "truck/large": 56
+  },
+  "recall_by_class_scale": {
+    "car/large": 0.898,
+    "car/medium": 0.85,
+    "car/small": 0.901,
+    "person/large": 0.804,
+    "person/medium": 0.687,
+    "person/small": 0.463,
+    "truck/large": 0.696,
+    "truck/medium": 0.444,
+    "truck/small": 0.647
+  },
+  "images_saved": [
+    "044err_000845.jpg",
+    "040err_000573.jpg",
+    "039err_007035.jpg",
+    "038err_007361.jpg",
+    "035err_006336.jpg",
+    "034err_003246.jpg",
+    "033err_002596.jpg",
+    "033err_005245.jpg"
+  ],
+  "legend": "thick orange=missed GT (FN), thin green=matched GT, blue=TP, red=FP (label = type)"
+}

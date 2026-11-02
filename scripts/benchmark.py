@@ -5,7 +5,8 @@
 
 Protocol (state this in the report):
   * batch 1, FP16 on GPU, same eval thresholds as accuracy runs (conf 0.001 -> worst-case NMS load)
-  * `warmup` untimed iterations, then `n_images` timed images
+  * `warmup` untimed iterations, then `repeats` timed passes over `n_images` images;
+    latency_ms_mean = median of the per-pass means (all pass means stored in pass_means_ms)
   * torch.cuda.synchronize() before/after each call; end-to-end = preprocess + model + postprocess
   * peak memory = torch.cuda.max_memory_allocated() after reset (PyTorch allocator, not nvidia-smi)
 """
@@ -20,7 +21,9 @@ from detectors import build_detector
 from predict import dataset_images
 
 
-def bench_one(model: str, dataset: str, cfg: dict, n: int, warmup: int, imgsz=None) -> dict:
+def bench_one(model: str, dataset: str, cfg: dict, n: int, warmup: int, imgsz=None,
+              repeats: int | None = None) -> dict:
+    repeats = repeats or cfg["benchmark"].get("repeats", 1)
     import cv2
     import torch
     dev = resolve_device(cfg["device"])
@@ -34,9 +37,14 @@ def bench_one(model: str, dataset: str, cfg: dict, n: int, warmup: int, imgsz=No
         det(arrays[i % len(arrays)])
     if dev != "cpu":
         torch.cuda.reset_peak_memory_stats()
-    timings = [det(a)[3] for a in arrays]
+    # `repeats` timed passes over the same images; headline latency = median of pass means, so one
+    # transient slow window (seen on Windows/WDDM: a whole pass at +60%) cannot set the reported number
+    passes = [[det(a)[3] for a in arrays] for _ in range(repeats)]
     peak = torch.cuda.max_memory_allocated() / 1024**2 if dev != "cpu" else None
+    timings = [t for ps in passes for t in ps]
     tot = np.array([t["total_ms"] for t in timings])
+    pass_means = [float(np.mean([t["total_ms"] for t in ps])) for ps in passes]
+    lat = float(np.median(pass_means))
     n_params = None
     m = getattr(det, "model", None)
     try:
@@ -45,8 +53,9 @@ def bench_one(model: str, dataset: str, cfg: dict, n: int, warmup: int, imgsz=No
         pass
     res = {"model": model, "dataset": dataset, "imgsz": imgsz or cfg["models"][model].get("imgsz"),
            "n_images": len(arrays), "warmup": warmup, "device": dev, "half": getattr(det, "half", False),
-           "latency_ms_mean": float(tot.mean()), "latency_ms_p50": float(np.percentile(tot, 50)),
-           "latency_ms_p90": float(np.percentile(tot, 90)), "fps": float(1000 / tot.mean()),
+           "repeats": repeats, "pass_means_ms": pass_means,
+           "latency_ms_mean": lat, "latency_ms_p50": float(np.percentile(tot, 50)),
+           "latency_ms_p90": float(np.percentile(tot, 90)), "fps": float(1000 / lat),
            "breakdown_ms": {k: float(np.mean([t[k] for t in timings])) for k in timings[0]},
            "peak_mem_mb": peak, "params_m": n_params}
     del det

@@ -27,3 +27,12 @@
 
 ## Stage 4 - fine-tuning
     python run_all.py --stages finetune predict_ft evaluate
+
+## Stage 5 - benchmark, failures, tables, sanity
+    python run_all.py --stages benchmark failures analyze sanity
+    python <scratchpad>/diag_bench.py yolo11s   # diagnosis: per-shape first-call cost (not in repo)
+    # fix: configs/experiments.yaml benchmark.warmup 20 -> 200
+    python run_all.py --stages benchmark analyze sanity
+    # fix: benchmark.repeats 3 (median of pass means) - scripts/benchmark.py
+    python run_all.py --stages benchmark analyze sanity
+    python scripts/analyze.py   # + pass_range_ms column

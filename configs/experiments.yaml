@@ -126,7 +126,9 @@ benchmark:
   models: [yolo11s, rtdetr_l, frcnn_r50_v2, fcos_r50, yoloworld_s]
   datasets: [coco, kitti]
   n_images: 200
-  warmup: 20
+  repeats: 3         # timed passes per row; reported latency = median of the 3 pass means
+  warmup: 200        # = n_images: every input shape seen once before timing (was 20: YOLO11s on COCO
+                     # paid a one-time per-shape setup cost of up to 1 s on 9/200 imgs -> mean 56.5 vs p50 5.4 ms)
 
 quick:            # used by `python run_all.py --quick` (smoke test, minutes not hours)
   n_images: 25

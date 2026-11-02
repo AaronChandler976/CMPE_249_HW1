@@ -92,7 +92,10 @@ def main() -> None:
         bench = load_json(METRIC_DIR / "benchmark.json")
         b = pd.DataFrame([{"model": PRETTY.get(r["model"], r["model"]), "key": r["model"],
                            "dataset": r["dataset"], "imgsz": r["imgsz"],
-                           "latency_ms": r["latency_ms_mean"], "p90_ms": r["latency_ms_p90"],
+                           "latency_ms": r["latency_ms_mean"],
+                           "pass_range_ms": (f"{min(r['pass_means_ms']):.1f}-{max(r['pass_means_ms']):.1f}"
+                                             if r.get("pass_means_ms") else ""),
+                           "p90_ms": r["latency_ms_p90"],
                            "FPS": r["fps"], "peak_mem_MB": r["peak_mem_mb"], "params_M": r["params_m"]}
                           for r in bench["rows"]])
         write(b.drop(columns="key"), "benchmark")

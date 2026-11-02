@@ -1,6 +1,6 @@
 # Sanity report
 
-Mode: full | FAIL: 2 | WARN: 0 | PASS: 105
+Mode: full | FAIL: 0 | WARN: 0 | PASS: 109
 
 | status | check | detail |
 |---|---|---|
@@ -103,11 +103,13 @@ Mode: full | FAIL: 2 | WARN: 0 | PASS: 105
 | PASS | yolo11s_kitti_ft__kitti on kitti_native: AP <= AP50, AP75 <= AP50, no NaN | AP=67.16 AP50=90.31 AP75=75.53 |
 | PASS | fine-tuned YOLO11s beats zero-shot on KITTI | 71.6 vs 24.6 |
 | PASS | imgsz 1280 >= 640 on KITTI (small objects) | 26.9 vs 24.6 |
-| FAIL | benchmark.json exists |  |
+| PASS | benchmark.json exists |  |
+| PASS | all latencies > 0 | 11 rows |
+| PASS | peak GPU memory recorded for every model |  |
 | PASS | table main_results.md |  |
 | PASS | table domain_shift.md |  |
 | PASS | table benchmark.md |  |
 | PASS | figure speed_accuracy.png |  |
 | PASS | figure domain_shift_per_class.png |  |
 | PASS | figure domain_shift_scale.png |  |
-| FAIL | failure analysis summary exists |  |
+| PASS | failure analysis summary exists |  |
