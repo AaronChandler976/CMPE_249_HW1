@@ -160,23 +160,26 @@ def main() -> None:
         fig.savefig(FIG_DIR / "domain_shift_scale.png", dpi=200)
         plt.close(fig)
 
-    # ---------------- speed vs accuracy (COCO)
+    # ---------------- speed vs accuracy (KITTI: its latencies are stable across repeats, COCO's
+    # varied by up to 5 ms on Windows/WDDM because of variable input shapes)
     if bench:
         pts = []
         for r in bench["rows"]:
-            m = M.get((f"{r['model']}__coco", "coco"))
-            if r["dataset"] == "coco" and m and not r.get("tag"):
+            m = M.get((f"{r['model']}__kitti", "kitti_cocomap"))
+            if r["dataset"] == "kitti" and m and not r.get("tag"):
                 pts.append((PRETTY[r["model"]], r["latency_ms_mean"], m["stats"]["AP"], r["peak_mem_mb"]))
         if pts:
             fig, ax = plt.subplots(figsize=(7.5, 4.8), facecolor=SURFACE)
-            for name, lat, ap_, mem in pts:
+            for i, (name, lat, ap_, mem) in enumerate(sorted(pts, key=lambda t: t[1])):
                 ax.scatter(lat, ap_, s=90, color=BLUE, edgecolor=SURFACE, linewidth=2, zorder=3)
                 lab = name + (f"\n{mem:.0f} MB peak" if mem else "")
-                ax.annotate(lab, (lat, ap_), xytext=(8, 4), textcoords="offset points", fontsize=9,
-                            color=INK2)
-            style(ax, "Speed vs accuracy on COCO val2017 (batch 1)", "End-to-end latency (ms / image)",
-                  "COCO AP@[.5:.95] (%)")
+                above = i % 2 == 0                      # alternate so neighbouring labels never collide
+                ax.annotate(lab, (lat, ap_), xytext=(8, 6 if above else -8), textcoords="offset points",
+                            fontsize=9, color=INK2, va="bottom" if above else "top")
+            style(ax, "Speed vs accuracy on KITTI val, zero-shot (batch 1, median of 3 passes)",
+                  "End-to-end latency (ms / image)", "KITTI AP@[.5:.95], person/car/truck (%)")
             ax.grid(axis="x", color=GRID, linewidth=0.8)
+            ax.margins(x=0.25, y=0.25)     # room for the point labels
             fig.tight_layout()
             fig.savefig(FIG_DIR / "speed_accuracy.png", dpi=200)
             plt.close(fig)

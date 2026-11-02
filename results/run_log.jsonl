@@ -105,3 +105,5 @@
 {"time": "2026-11-01T17:03:25", "event": "analyze", "argv": "run_all.py --stages benchmark analyze sanity", "cwd": "<repo>", "n_metric_files": 14}
 {"time": "2026-11-01T17:03:25", "event": "run_all_done", "argv": "sanity_checks.py", "cwd": "<repo>", "minutes": 2.5, "sanity_exit": 0}
 {"time": "2026-11-01T17:03:43", "event": "analyze", "argv": "scripts/analyze.py", "cwd": "<repo>", "n_metric_files": 14}
+{"time": "2026-11-01T17:41:31", "event": "analyze", "argv": "scripts/analyze.py", "cwd": "<repo>", "n_metric_files": 14}
+{"time": "2026-11-01T17:41:44", "event": "analyze", "argv": "scripts/analyze.py", "cwd": "<repo>", "n_metric_files": 14}

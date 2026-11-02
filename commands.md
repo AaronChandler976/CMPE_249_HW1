@@ -46,3 +46,7 @@
     python scripts/diagnostics/diag_fcos.py 5000 fcos_r50 --per-class   # FP16 loss by class, full COCO
     python scripts/diagnostics/yoloworld_prompts.py                     # "pedestrian" vs "person" prompt
     # outputs saved to results/metrics/diagnostics/*.txt and results/tables/sensitivity_taxonomy.md
+
+## Report
+    # docs/report/report.html -> PDF via headless Edge:
+    msedge --headless=new --no-pdf-header-footer --print-to-pdf=docs/report/CMPE249_HW1_Report.pdf docs/report/report.html
