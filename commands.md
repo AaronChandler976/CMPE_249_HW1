@@ -50,3 +50,6 @@
 ## Report
     # docs/report/report.html -> PDF via headless Edge:
     msedge --headless=new --no-pdf-header-footer --print-to-pdf=docs/report/CMPE249_HW1_Report.pdf docs/report/report.html
+    python scripts/diagnostics/bootstrap_ci.py 1000      # 95% image-bootstrap CIs + paired diffs vs RT-DETR-L
+    python scripts/diagnostics/diag_bench.py yolo11s     # re-run, saved to results/metrics/diagnostics/bench_warmup.txt
+    # report revised after rubric-reviewer pass; PDF re-printed with headless Edge (see Report above)

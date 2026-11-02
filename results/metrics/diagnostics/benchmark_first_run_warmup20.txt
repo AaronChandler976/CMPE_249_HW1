@@ -1,0 +1,12 @@
+# First full benchmark run (warmup 20, 1 pass), [bench] lines from: python run_all.py --stages benchmark failures analyze sanity  (2026-11-01 16:54)
+[bench] yolo11s on coco: 56.5 ms  (17.7 FPS)  peak 71 MB
+[bench] rtdetr_l on coco: 14.3 ms  (70.1 FPS)  peak 143 MB
+[bench] frcnn_r50_v2 on coco: 21.0 ms  (47.5 FPS)  peak 637 MB
+[bench] fcos_r50 on coco: 25.5 ms  (39.2 FPS)  peak 501 MB
+[bench] yoloworld_s on coco: 6.8 ms  (146.4 FPS)  peak 81 MB
+[bench] yolo11s on kitti: 5.0 ms  (199.6 FPS)  peak 72 MB
+[bench] rtdetr_l on kitti: 13.3 ms  (75.0 FPS)  peak 166 MB
+[bench] frcnn_r50_v2 on kitti: 16.2 ms  (61.9 FPS)  peak 480 MB
+[bench] fcos_r50 on kitti: 20.8 ms  (48.1 FPS)  peak 384 MB
+[bench] yoloworld_s on kitti: 6.9 ms  (145.0 FPS)  peak 135 MB
+[bench] yolo11s on kitti: 5.6 ms  (178.6 FPS)  peak 103 MB

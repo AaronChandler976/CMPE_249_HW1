@@ -36,3 +36,13 @@ Every setting (thresholds, resolutions, runs) is in `configs/experiments.yaml`.
 ## How this was built
 Pipeline code was written with AI assistance (Claude) and run and verified locally. Each published COCO
 mAP is reproduced as a correctness check before any KITTI number is trusted.
+
+## Report
+`docs/report/CMPE249_HW1_Report.pdf` (source: `docs/report/report.html`). Findings with sources: `docs/findings.md`.
+
+## Data and licences
+No datasets are stored in this repo; `scripts/prepare_data.py` downloads them.
+- KITTI Vision Benchmark Suite (Geiger, Lenz, Urtasun, CVPR 2012), licensed CC BY-NC-SA 3.0.
+  The annotated example images in `results/failures/` are derived from KITTI images and are shared under
+  the same licence, for non-commercial academic use.
+- COCO (Lin et al., ECCV 2014). Annotations are CC BY 4.0; images are subject to Flickr terms.

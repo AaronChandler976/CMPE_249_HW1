@@ -1,0 +1,3 @@
+# python scripts/diagnostics/diag_bench.py yolo11s   (re-run 2026-11-01 17:54; 20-image warmup, then 2 passes over the same 200 COCO images)
+yolo11s pass 1: mean 51.4 p50 5.3 max 1041 ms, >20ms: 9 imgs, share of total time in those: 90%
+yolo11s pass 2: mean 5.3 p50 5.2 max 9 ms, >20ms: 0 imgs, share of total time in those: 0%

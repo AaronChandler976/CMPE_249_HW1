@@ -1,0 +1,3 @@
+# parameter counts (M) of the two YOLO11s checkpoints, sum of model.parameters()
+weights/yolo11s.pt 9.46
+runs/finetune/yolo11s_kitti/weights/best.pt 9.43

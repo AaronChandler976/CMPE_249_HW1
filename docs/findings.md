@@ -45,10 +45,11 @@ Van confusion is a large part of the truck drop, not all of it.
 `results/tables/sensitivity_taxonomy.md` (`scripts/diagnostics/sensitivity_taxonomy.py`). Box
 counts from `scripts/diagnostics/truck_on_van.py` over `results/predictions/*.json` + KITTI native GT.
 
-## F4. Drops happen at every object scale, so the shift is not only "KITTI objects are small"
-COCO 3-cls -> KITTI AP for **large** objects drops nearly as much as for small ones: YOLO11s 69.6 ->
-36.8, RT-DETR 75.4 -> 40.9, Faster R-CNN 67.4 -> 40.0. Small objects drop 27.9 -> 14.0 (YOLO11s) but
-barely at all for YOLO-World (24.0 -> 23.7). Also, most KITTI GT is **medium** by COCO area
+## F4. Medium and large objects drop sharply for every model, so the shift is not mainly "KITTI objects are small"
+(Corrected after review: an earlier version said large objects drop "nearly as much as small ones".)
+Relative COCO 3-cls -> KITTI drop: **medium 45-60 %, large 32-47 % for every model** (e.g. YOLO11s
+large 69.6 -> 36.8). Small objects vary widely: 2 % for YOLO-World (24.0 -> 23.7) up to 58 % for Faster
+R-CNN (36.3 -> 15.3). Also, most KITTI GT is **medium** by COCO area
 thresholds (e.g. cars 17 % small / 53 % medium / 30 % large, `results/dataset_stats.json`).
 **Source:** `results/tables/domain_shift_scale.md`, `results/figures/domain_shift_scale.png`.
 **Resolution ablation (YOLO11s):** imgsz 640 -> 1280 lifts AP_small 14.0 -> 21.9 and AP 24.6 -> 26.9.
@@ -56,14 +57,17 @@ AP_large stays flat (36.8 -> 36.3), and latency rises only 5.0 -> 5.6 ms (`resul
 `benchmark.md`). Pixels help small objects. They do not fix the large-object drop, which points to
 annotation/definition differences (F2, F3, F6) rather than resolution.
 
-## F5. COCO rankings do not transfer: a 16-pt spread on COCO shrinks to 4.4 pts on KITTI
-COCO 80-cls AP ranges 36.8 (YOLO-World) to 52.8 (RT-DETR-L). KITTI AP ranges 24.6 (YOLO11s) to
-29.0 (RT-DETR-L). YOLO-World is **last on COCO but ties for best on KITTI** (28.8) and has the
-smallest drop (12.8). YOLO11s is mid-pack on COCO but last on KITTI.
-**Source:** `results/tables/domain_shift.md`, `main_results.md`.
+## F5. COCO rankings do not transfer: an 11-pt spread on COCO's 3 classes shrinks to 4.4 pts on KITTI
+(Corrected after review: an earlier version compared the 80-class COCO spread, 16 pts, with 3-class
+KITTI, which is exactly the unfair comparison CLAUDE.md forbids.)
+COCO 3-cls AP ranges 41.6 (YOLO-World) to 52.6 (RT-DETR-L). KITTI AP ranges 24.6 (YOLO11s) to
+29.0 (RT-DETR-L). A paired image bootstrap (B=1000) finds RT-DETR, Faster R-CNN, FCOS and YOLO-World
+**statistically tied** on KITTI (all differences vs RT-DETR have 95 % CIs containing 0, e.g. YOLO-World
+-0.1 [-1.7, +1.4]). Only YOLO11s is significantly worse, at -4.3 [-5.5, -3.3]. YOLO-World is last on
+COCO's 3 classes but tied for best on KITTI.
+**Source:** `results/tables/domain_shift.md`, `results/tables/bootstrap_ci.md`.
 **Interpretation:** benchmark rank on the training distribution is a poor predictor of
-out-of-domain rank. Differences of 1-2 KITTI AP between models (one val split, truck AP from only
-223 boxes) should not be over-read. With car at 83 % of the boxes, the 3-class mean gives truck
+out-of-domain rank. Truck AP CIs are 6-10 pts wide (223 boxes), and the 3-class mean gives truck
 the same weight as car.
 
 ## F6. 25 minutes of fine-tuning nearly triples KITTI AP (24.6 -> 71.6)
