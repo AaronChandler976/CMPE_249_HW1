@@ -1,0 +1,89 @@
+{
+  "run": "yolo11s_kitti_ft__kitti",
+  "target": "kitti_native",
+  "model": "yolo11s_kitti_ft",
+  "dataset": "kitti",
+  "imgsz": 640,
+  "n_images": 1496,
+  "n_dets_scored": 34872,
+  "stats": {
+    "AP": 67.16,
+    "AP50": 90.31,
+    "AP75": 75.53,
+    "AP_small": 50.64,
+    "AP_medium": 68.03,
+    "AP_large": 74.24,
+    "AR1": 45.67,
+    "AR10": 72.91,
+    "AR100": 74.39,
+    "AR_small": 57.35,
+    "AR_medium": 74.54,
+    "AR_large": 80.85
+  },
+  "per_class": {
+    "car": {
+      "AP": 80.91669921428029,
+      "AP50": 97.11771306196569,
+      "AP75": 91.52307442378546,
+      "AP_small": 67.16425915103635,
+      "AP_medium": 79.71906816763314,
+      "AP_large": 89.28587172842605,
+      "n_gt": 5716
+    },
+    "van": {
+      "AP": 77.08981006383593,
+      "AP50": 94.38532276277365,
+      "AP75": 87.74806452030231,
+      "AP_small": 58.6296618718052,
+      "AP_medium": 76.79277003908399,
+      "AP_large": 86.65706378880435,
+      "n_gt": 555
+    },
+    "truck": {
+      "AP": 83.93342218838613,
+      "AP50": 98.29989359849561,
+      "AP75": 93.65657629268959,
+      "AP_small": 84.40842494709452,
+      "AP_medium": 81.0922353812414,
+      "AP_large": 90.9060130739925,
+      "n_gt": 223
+    },
+    "pedestrian": {
+      "AP": 49.70163164433155,
+      "AP50": 83.32713957838203,
+      "AP75": 55.42527435212048,
+      "AP_small": 23.359479553672852,
+      "AP_medium": 53.24807503969306,
+      "AP_large": 61.787606563036555,
+      "n_gt": 921
+    },
+    "person_sitting": {
+      "AP": 43.25764901654109,
+      "AP50": 73.29423155496303,
+      "AP75": 42.60755010244429,
+      "AP_small": 0.0,
+      "AP_medium": 50.01063289834775,
+      "AP_large": 44.69515371821013,
+      "n_gt": 36
+    },
+    "cyclist": {
+      "AP": 60.365542482886895,
+      "AP50": 88.70881450210764,
+      "AP75": 69.77756792484502,
+      "AP_small": 46.464198059755574,
+      "AP_medium": 63.534578014395,
+      "AP_large": 67.08293351795686,
+      "n_gt": 352
+    },
+    "tram": {
+      "AP": 74.87829663207295,
+      "AP50": 97.04345822262442,
+      "AP75": 87.96614793879202,
+      "AP_small": 74.45544554455445,
+      "AP_medium": 71.83316958298927,
+      "AP_large": 79.25483074752542,
+      "n_gt": 117
+    }
+  },
+  "pycocotools_summary": "Running per image evaluation...\nEvaluate annotation type *bbox*\nDONE (t=1.34s).\nAccumulating evaluation results...\nDONE (t=0.21s).\n Average Precision  (AP) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.672\n Average Precision  (AP) @[ IoU=0.50      | area=   all | maxDets=100 ] = 0.903\n Average Precision  (AP) @[ IoU=0.75      | area=   all | maxDets=100 ] = 0.755\n Average Precision  (AP) @[ IoU=0.50:0.95 | area= small | maxDets=100 ] = 0.506\n Average Precision  (AP) @[ IoU=0.50:0.95 | area=medium | maxDets=100 ] = 0.680\n Average Precision  (AP) @[ IoU=0.50:0.95 | area= large | maxDets=100 ] = 0.742\n Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=  1 ] = 0.457\n Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets= 10 ] = 0.729\n Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.744\n Average Recall     (AR) @[ IoU=0.50:0.95 | area= small | maxDets=100 ] = 0.574\n Average Recall     (AR) @[ IoU=0.50:0.95 | area=medium | maxDets=100 ] = 0.745\n Average Recall     (AR) @[ IoU=0.50:0.95 | area= large | maxDets=100 ] = 0.809\n"
+}

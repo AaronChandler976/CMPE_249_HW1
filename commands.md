@@ -24,3 +24,6 @@
     python scripts/evaluate.py --run fcos_r50__coco --target coco
     python scripts/evaluate.py --run fcos_r50__kitti --target kitti_cocomap
     python scripts/analyze.py      # regenerate tables/figures from full-run metrics
+
+## Stage 4 - fine-tuning
+    python run_all.py --stages finetune predict_ft evaluate

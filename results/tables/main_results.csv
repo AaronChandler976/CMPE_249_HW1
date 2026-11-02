@@ -8,6 +8,8 @@ rtdetr_l__kitti,RT-DETR-L,"DETR (query-based, NMS-free)",kitti_cocomap,640,1496,
 yolo11s__coco,YOLO11s,"YOLO (one-stage, anchor-free, NMS)",coco,640,5000,45.63,62.29,49.3,27.82,50.15,62.5,61.67
 yolo11s__kitti,YOLO11s,"YOLO (one-stage, anchor-free, NMS)",kitti_cocomap,640,1496,24.59,48.25,22.54,14.02,22.16,36.76,42.74
 yolo11s__kitti__res1280,YOLO11s,"YOLO (one-stage, anchor-free, NMS)",kitti_cocomap,1280,1496,26.86,50.98,25.09,21.95,25.17,36.34,47.01
+yolo11s_kitti_ft__kitti,YOLO11s (KITTI fine-tuned),YOLO (fine-tuned on KITTI train),kitti_cocomap,640,1496,71.56,93.03,80.25,58.33,71.37,80.68,77.08
+yolo11s_kitti_ft__kitti,YOLO11s (KITTI fine-tuned),YOLO (fine-tuned on KITTI train),kitti_native,640,1496,67.16,90.31,75.53,50.64,68.03,74.24,74.39
 yoloworld_s__coco,YOLO-World-S v2,"Open-vocabulary (YOLO-World, text-prompted)",coco,640,5000,36.77,51.29,39.83,20.58,40.52,48.92,56.85
 yoloworld_s__kitti,YOLO-World-S v2,"Open-vocabulary (YOLO-World, text-prompted)",kitti_cocomap,640,1496,28.8,49.97,29.5,23.66,26.36,42.39,54.01
 yoloworld_s__kitti,YOLO-World-S v2,"Open-vocabulary (YOLO-World, text-prompted)",kitti_native,640,1496,15.35,26.89,15.6,11.25,15.06,22.63,35.63

@@ -1,6 +1,6 @@
 # Sanity report
 
-Mode: full | FAIL: 3 | WARN: 0 | PASS: 95
+Mode: full | FAIL: 2 | WARN: 0 | PASS: 105
 
 | status | check | detail |
 |---|---|---|
@@ -92,7 +92,16 @@ Mode: full | FAIL: 3 | WARN: 0 | PASS: 95
 | PASS | yolo11s__kitti__res1280 produced detections | 241441 |
 | PASS | metrics: yolo11s__kitti__res1280 on kitti_cocomap |  |
 | PASS | yolo11s__kitti__res1280 on kitti_cocomap: AP <= AP50, AP75 <= AP50, no NaN | AP=26.86 AP50=50.98 AP75=25.09 |
-| FAIL | predictions+meta: yolo11s_kitti_ft__kitti |  |
+| PASS | predictions+meta: yolo11s_kitti_ft__kitti |  |
+| PASS | yolo11s_kitti_ft__kitti evaluated on full split | 1496/1496 |
+| PASS | yolo11s_kitti_ft__kitti ran on GPU | NVIDIA GeForce RTX 5070 Ti |
+| PASS | yolo11s_kitti_ft__kitti used a low conf threshold for mAP | 0.001 |
+| PASS | yolo11s_kitti_ft__kitti produced detections | 36225 |
+| PASS | metrics: yolo11s_kitti_ft__kitti on kitti_cocomap |  |
+| PASS | yolo11s_kitti_ft__kitti on kitti_cocomap: AP <= AP50, AP75 <= AP50, no NaN | AP=71.56 AP50=93.03 AP75=80.25 |
+| PASS | metrics: yolo11s_kitti_ft__kitti on kitti_native |  |
+| PASS | yolo11s_kitti_ft__kitti on kitti_native: AP <= AP50, AP75 <= AP50, no NaN | AP=67.16 AP50=90.31 AP75=75.53 |
+| PASS | fine-tuned YOLO11s beats zero-shot on KITTI | 71.6 vs 24.6 |
 | PASS | imgsz 1280 >= 640 on KITTI (small objects) | 26.9 vs 24.6 |
 | FAIL | benchmark.json exists |  |
 | PASS | table main_results.md |  |

@@ -68,3 +68,23 @@
 {"time": "2026-11-01T16:20:57", "event": "evaluate", "argv": "scripts/evaluate.py --run fcos_r50__coco --target coco", "cwd": "<repo>", "run": "fcos_r50__coco", "target": "coco", "AP": 39.33}
 {"time": "2026-11-01T16:21:06", "event": "evaluate", "argv": "scripts/evaluate.py --run fcos_r50__kitti --target kitti_cocomap", "cwd": "<repo>", "run": "fcos_r50__kitti", "target": "kitti_cocomap", "AP": 28.73}
 {"time": "2026-11-01T16:21:42", "event": "analyze", "argv": "scripts/analyze.py", "cwd": "<repo>", "n_metric_files": 12}
+{"time": "2026-11-01T16:21:57", "event": "run_all_start", "argv": "run_all.py --stages finetune predict_ft evaluate", "cwd": "<repo>", "quick": false, "stages": ["finetune", "predict_ft", "evaluate"]}
+{"time": "2026-11-01T16:21:59", "event": "finetune_start", "argv": "finetune.py", "cwd": "<repo>", "data": "<repo>\\configs\\kitti_local.yaml", "epochs": "50", "imgsz": "640", "batch": "16", "workers": "4", "patience": "15", "device": "0", "seed": "0", "deterministic": "True", "project": "<repo>\\runs\\finetune", "name": "yolo11s_kitti", "exist_ok": "True", "plots": "True", "verbose": "True"}
+{"time": "2026-11-01T16:47:12", "event": "finetune_done", "argv": "finetune.py", "cwd": "<repo>", "save_dir": "<repo>\\runs\\finetune\\yolo11s_kitti"}
+{"time": "2026-11-01T16:47:24", "event": "predict", "argv": "finetune.py", "cwd": "<repo>", "run": "yolo11s_kitti_ft__kitti", "n_images": 1496, "wall_time_s": 12.2}
+{"time": "2026-11-01T16:47:45", "event": "evaluate", "argv": "finetune.py", "cwd": "<repo>", "run": "yolo11s__coco", "target": "coco", "AP": 45.63}
+{"time": "2026-11-01T16:48:26", "event": "evaluate", "argv": "finetune.py", "cwd": "<repo>", "run": "rtdetr_l__coco", "target": "coco", "AP": 52.75}
+{"time": "2026-11-01T16:48:59", "event": "evaluate", "argv": "finetune.py", "cwd": "<repo>", "run": "frcnn_r50_v2__coco", "target": "coco", "AP": 47.01}
+{"time": "2026-11-01T16:49:44", "event": "evaluate", "argv": "finetune.py", "cwd": "<repo>", "run": "fcos_r50__coco", "target": "coco", "AP": 39.33}
+{"time": "2026-11-01T16:50:10", "event": "evaluate", "argv": "finetune.py", "cwd": "<repo>", "run": "yoloworld_s__coco", "target": "coco", "AP": 36.77}
+{"time": "2026-11-01T16:50:15", "event": "evaluate", "argv": "finetune.py", "cwd": "<repo>", "run": "yolo11s__kitti", "target": "kitti_cocomap", "AP": 24.59}
+{"time": "2026-11-01T16:50:22", "event": "evaluate", "argv": "finetune.py", "cwd": "<repo>", "run": "rtdetr_l__kitti", "target": "kitti_cocomap", "AP": 28.99}
+{"time": "2026-11-01T16:50:28", "event": "evaluate", "argv": "finetune.py", "cwd": "<repo>", "run": "frcnn_r50_v2__kitti", "target": "kitti_cocomap", "AP": 28.32}
+{"time": "2026-11-01T16:50:36", "event": "evaluate", "argv": "finetune.py", "cwd": "<repo>", "run": "fcos_r50__kitti", "target": "kitti_cocomap", "AP": 28.73}
+{"time": "2026-11-01T16:50:40", "event": "evaluate", "argv": "finetune.py", "cwd": "<repo>", "run": "yoloworld_s__kitti", "target": "kitti_cocomap", "AP": 28.8}
+{"time": "2026-11-01T16:50:43", "event": "evaluate", "argv": "finetune.py", "cwd": "<repo>", "run": "yoloworld_s__kitti", "target": "kitti_native", "AP": 15.35}
+{"time": "2026-11-01T16:50:49", "event": "evaluate", "argv": "finetune.py", "cwd": "<repo>", "run": "yolo11s__kitti__res1280", "target": "kitti_cocomap", "AP": 26.86}
+{"time": "2026-11-01T16:50:51", "event": "evaluate", "argv": "finetune.py", "cwd": "<repo>", "run": "yolo11s_kitti_ft__kitti", "target": "kitti_cocomap", "AP": 71.56}
+{"time": "2026-11-01T16:50:53", "event": "evaluate", "argv": "finetune.py", "cwd": "<repo>", "run": "yolo11s_kitti_ft__kitti", "target": "kitti_native", "AP": 67.16}
+{"time": "2026-11-01T16:50:53", "event": "run_all_done", "argv": "finetune.py", "cwd": "<repo>", "minutes": 28.9, "sanity_exit": 0}
+{"time": "2026-11-01T16:51:24", "event": "analyze", "argv": "scripts/analyze.py", "cwd": "<repo>", "n_metric_files": 14}
