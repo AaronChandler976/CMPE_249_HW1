@@ -5,7 +5,8 @@
 At a fixed operating point (vis conf, IoU 0.5) every prediction / GT box is classified:
   TP            IoU>=0.5 with an unmatched GT of the same class
   FP-duplicate  IoU>=0.5 with an already-matched GT of the same class  (NMS failure)
-  FP-class      IoU>=0.5 with a GT of a different class                 (confusion)
+  FP-class      IoU>=0.5 with a GT of a different class, ignore regions included (confusion,
+                e.g. a 'truck' on a Van, whose ignore region belongs to 'car')
   FP-loc        0.1<=IoU<0.5 with a GT of the same class                (bad box)
   FP-background IoU<0.1 with every GT                                    (hallucination)
   FN            GT never matched, reported per class x scale
@@ -67,6 +68,7 @@ def analyze(run: str, target: str, k: int, conf: float, cfg: dict) -> dict:
         cb = np.array([a["bbox"] for a in C]).reshape(-1, 4)
         db = np.array([d["bbox"] for d in D]).reshape(-1, 4)
         I = iou_matrix(db, gb)
+        Icr = iou_matrix(db, cb)    # plain IoU with ignore regions, for cross-class confusion
         # crowd: pycocotools uses intersection / det-area
         Ic = np.zeros((len(D), len(C)))
         if len(C) and len(D):
@@ -93,8 +95,9 @@ def analyze(run: str, target: str, k: int, conf: float, cfg: dict) -> dict:
                 continue
             if any(I[i, j] >= 0.5 for j in same):
                 labels.append("FP-duplicate")
-            elif any(I[i, j] >= 0.5 for j in range(len(G))):
-                labels.append("FP-class")
+            elif any(I[i, j] >= 0.5 for j in range(len(G))) or \
+                    any(Icr[i, j] >= 0.5 for j, c in enumerate(C) if c["category_id"] != d["category_id"]):
+                labels.append("FP-class")   # ignore regions of another class (Van for 'car') count too
             elif any(I[i, j] >= 0.1 for j in same):
                 labels.append("FP-loc")
             else:

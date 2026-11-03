@@ -91,7 +91,8 @@ def main() -> None:
         out["runs"][run] = {"AP": round(point[run][0], 2), "ci95": [round(lo, 2), round(hi, 2)],
                             "diff_vs_rtdetr_ci95": [round(dlo, 2), round(dhi, 2)], "per_class_ci95": pc_ci}
         rows.append(f"| {name} | {point[run][0]:.1f} | {lo:.1f}-{hi:.1f} | "
-                    + ("-" if run == REF else f"{np.mean(d):+.1f} [{dlo:+.1f}, {dhi:+.1f}]") + " | "
+                    # observed (point) difference, with the bootstrap percentile interval
+                    + ("-" if run == REF else f"{point[run][0] - point[REF][0]:+.1f} [{dlo:+.1f}, {dhi:+.1f}]") + " | "
                     + " | ".join(f"{point[run][1][i]:.1f} ({pc_ci[c][0]:.1f}-{pc_ci[c][1]:.1f})" for i, c in enumerate(cats))
                     + " |")
     save_json(out, METRIC_DIR / "diagnostics" / "bootstrap_ci.json")
