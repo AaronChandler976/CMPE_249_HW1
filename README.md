@@ -85,7 +85,10 @@ Add `--skip-existing` to resume after an interruption, or `--stages <names>` to 
   Tram and Misc are dropped. See [`docs/taxonomy_mapping.md`](docs/taxonomy_mapping.md).
 - **Fair comparison.** COCO → KITTI comparisons use the same three classes on both sides, never the
   80-class COCO mAP.
-- **Evaluation.** pycocotools, conf = 0.001, NMS IoU = 0.7, max 300 detections per image, for every model.
+- **Evaluation.** pycocotools, conf = 0.001 and at most 300 detections per image for every model. NMS IoU
+  is each framework's default: 0.7 for the Ultralytics models (YOLO11s, YOLO-World, fine-tuned YOLO11s),
+  0.5 for Faster R-CNN's final per-class NMS (its RPN applies 0.7 to proposals), and 0.6 for FCOS.
+  RT-DETR uses no NMS.
 
 ## Data and licences
 

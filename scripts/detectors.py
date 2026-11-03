@@ -47,6 +47,8 @@ class UltralyticsDetector:
             self.label_space = "kitti"
             self.map = np.arange(1, len(kitti_names) + 1)
         self.nms = impl != "ultralytics_rtdetr"
+        # NMS IoU actually applied (recorded in run_meta). RT-DETR is NMS-free, so `iou` is ignored.
+        self.nms_iou = {"final": float(thr["nms_iou"])} if self.nms else None
 
     def __call__(self, img):
         sync(self.dev)
@@ -93,6 +95,15 @@ class TorchvisionDetector:
         self.half = bool(mcfg.get("half", cfg["half"])) and dev != "cpu"   # per-model override
         self.label_space = "coco"           # torchvision labels ARE COCO category ids
         self.nms = True
+        # torchvision does not take cfg["eval_thresholds"]["nms_iou"]; record the model's own NMS IoU
+        # (Faster R-CNN: box_nms_thresh=0.5 final per-class NMS, rpn_nms_thresh=0.7 on proposals;
+        #  FCOS/RetinaNet: nms_thresh=0.6 by default).
+        m = self.model
+        if hasattr(m, "roi_heads"):
+            self.nms_iou = {"final": float(m.roi_heads.nms_thresh),
+                            "rpn": float(m.rpn.nms_thresh)}
+        else:
+            self.nms_iou = {"final": float(m.nms_thresh)}
 
     def _load(self, img):
         torch = self.torch

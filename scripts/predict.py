@@ -57,7 +57,8 @@ def run(model: str, dataset: str, imgsz=None, tag=None, limit=None, cfg=None) ->
         "weights": mcfg.get("weights") or getattr(det, "weights_name", mcfg.get("arch")),
         "dataset": dataset, "split": "val2017" if dataset == "coco" else "kitti val (Ultralytics 1,496)",
         "n_images": len(imgs), "n_detections": len(results),
-        "imgsz": imgsz or mcfg.get("imgsz"), "thresholds": cfg["eval_thresholds"],
+        "imgsz": imgsz or mcfg.get("imgsz"),
+        "thresholds": {**cfg["eval_thresholds"], "nms_iou": det.nms_iou},   # actual per-model NMS IoU
         "nms": det.nms, "half": getattr(det, "half", False), "device": dev,
         "label_space": det.label_space, "prompts": getattr(det, "prompts", None),
         "image_ids": [r["id"] for r in imgs],
