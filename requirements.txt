@@ -1,3 +1,4 @@
+--extra-index-url https://download.pytorch.org/whl/cu128
 anyio==4.16.0
 certifi==2026.10.23
 charset-normalizer==3.5.2
@@ -20,7 +21,7 @@ networkx==3.7
 numpy==2.5.4
 nvidia-ml-py==13.615.71
 opencv-python==5.0.0.93
-packaging @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_packaging_1785888127/work
+packaging==26.3
 pandas==3.1.0
 pillow==13.0.0
 polars==2.1.0
@@ -43,3 +44,5 @@ ultralytics-thop==2.2.4
 urllib3==2.8.0
 wheel==0.48.0
 PyYAML==6.0.3
+tabulate==0.10.0
+clip @ git+https://github.com/ultralytics/CLIP.git@7ffa84b3bfa40c42ecc1c77147a855e69cb2dd40

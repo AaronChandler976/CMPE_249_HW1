@@ -11,7 +11,7 @@ from __future__ import annotations
 import argparse
 import shutil
 
-from common import METRIC_DIR, ROOT, env_info, load_cfg, log_event, p, resolve_device, save_json
+from common import METRIC_DIR, ROOT, env_info, load_cfg, log_event, p, resolve_device, save_json, scrub
 
 
 def main() -> None:
@@ -44,7 +44,11 @@ def main() -> None:
               "BoxPR_curve.png", "PR_curve.png"]:
         if (save_dir / f).exists():
             shutil.copy(save_dir / f, keep / f)
-    save_json({"train_kwargs": {k: str(v) for k, v in kw.items()}, "env": env_info()},
+    # Ultralytics writes absolute paths into args.yaml; keep the committed copy path-free
+    args_yaml = keep / "args.yaml"
+    if args_yaml.exists():
+        args_yaml.write_text(scrub(args_yaml.read_text(encoding="utf-8")), encoding="utf-8")
+    save_json({"train_kwargs": {k: scrub(str(v)) for k, v in kw.items()}, "env": env_info()},
               keep / "finetune_meta.json")
     log_event("finetune_done", save_dir=str(save_dir))
 

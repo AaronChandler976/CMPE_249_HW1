@@ -21,6 +21,15 @@ TABLE_DIR = RESULTS / "tables"
 FIG_DIR = RESULTS / "figures"
 LOG_PATH = RESULTS / "run_log.jsonl"
 
+# The command line as launched. Captured once at import because run_all.py rewrites sys.argv
+# before calling each stage's main().
+_ARGV = " ".join(sys.argv)
+
+
+def scrub(text: str) -> str:
+    """Replace the absolute repo path with '<repo>' so committed files carry no personal paths."""
+    return text.replace(str(ROOT), "<repo>").replace(ROOT.as_posix(), "<repo>")
+
 
 def p(rel: str | Path) -> Path:
     """Resolve a repo-relative path."""
@@ -114,9 +123,13 @@ def log_event(event: str, **kw) -> None:
     """Append one line to results/run_log.jsonl (the 'command log' deliverable)."""
     LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
     rec = {"time": _dt.datetime.now().isoformat(timespec="seconds"), "event": event,
-           "argv": " ".join(sys.argv), "cwd": os.getcwd(), **kw}
+           "argv": _ARGV, "cwd": scrub(os.getcwd()), **kw}
+    line = json.dumps(rec)
+    # absolute paths inside kw values appear JSON-escaped, so scrub the escaped form too
+    line = line.replace(json.dumps(str(ROOT))[1:-1], "<repo>")
+    line = line.replace(json.dumps(ROOT.as_posix())[1:-1], "<repo>")
     with open(LOG_PATH, "a", encoding="utf-8") as f:
-        f.write(json.dumps(rec) + "\n")
+        f.write(line + "\n")
 
 
 COCO80_NAMES = [

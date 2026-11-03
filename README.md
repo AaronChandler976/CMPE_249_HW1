@@ -3,7 +3,9 @@
 How much of a COCO-trained object detector's accuracy survives on a driving dataset, which classes and
 object sizes break, and is the fix a better architecture or in-domain data?
 
-Five COCO-pretrained detectors from four families are evaluated on COCO val2017 and, **without
+Four COCO-trained detectors from three families (YOLO11s, RT-DETR-L, Faster R-CNN R50-FPN v2,
+FCOS R50-FPN) and the open-vocabulary YOLO-World-S (pre-trained on Objects365 and grounding data,
+not COCO, so it is zero-shot on both datasets) are evaluated on COCO val2017 and, **without
 retraining**, on KITTI through a documented label mapping. A YOLO11s fine-tuned on KITTI is the
 in-domain reference. Every published COCO mAP is first reproduced to within 1.4 AP, so the KITTI
 numbers rest on a validated evaluation harness.
@@ -25,7 +27,7 @@ RTX 5070 Ti.
 | YOLO11s fine-tuned on KITTI | one-stage | – | **71.6** (70.3–72.9) | – |
 
 - **Transfer is class-specific.** Car AP barely moves, while person drops 33–44 points for every model.
-- **Architecture matters less than data.** The 11-point spread between models on COCO shrinks to 4.4 on
+- **Architecture matters less than data.** The 11-point spread between models on COCO's person/car/truck shrinks to 4.4 on
   KITTI, where three of the other four models are not significantly different from RT-DETR. Twenty-five minutes of fine-tuning adds 47 AP.
 - **The gap is not mainly about small objects.** Medium and large objects lose 32–60% of their AP.
 
@@ -37,6 +39,7 @@ Sources: `results/tables/main_results.md`, `results/tables/bootstrap_ci.md`, `re
 ├── configs/experiments.yaml   # single source of truth: models, thresholds, label mapping, runs
 ├── run_all.py                 # runs the pipeline stages in order
 ├── scripts/
+│   ├── common.py              # shared paths, config loading, environment capture, logging
 │   ├── prepare_data.py        # downloads COCO val2017 + KITTI, builds COCO-format KITTI ground truth
 │   ├── detectors.py           # uniform wrapper around Ultralytics and torchvision detectors
 │   ├── predict.py             # inference -> COCO-format detections
@@ -66,14 +69,20 @@ Sources: `results/tables/main_results.md`, `results/tables/bootstrap_ci.md`, `re
 Requires an NVIDIA GPU with CUDA 12.8+ (tested on Windows 11, RTX 5070 Ti).
 
 ```bash
-conda env create -f environment.yml
+conda env create -f environment.yml    # Windows: its conda section pins Windows runtime packages
 conda activate detection-transfer
-pip install git+https://github.com/ultralytics/CLIP.git tabulate
+# Linux/macOS instead: create any Python 3.12 env, then  pip install -r requirements.txt
 
 python run_all.py --quick          # ~2.5-minute smoke test (25 images per run)
+git checkout -- results            # the smoke test overwrites results/; this restores the published ones
 python run_all.py                  # full pipeline (~1-1.5 h): data, inference, fine-tuning, evaluation
 python scripts/sanity_checks.py    # must report FAIL=0
 ```
+
+Both environment files pin every package, including torch/torchvision CUDA 12.8 builds from the
+PyTorch index, `tabulate` and the Ultralytics CLIP fork used by YOLO-World. Datasets are downloaded
+by `scripts/prepare_data.py` into `data/`. Checkpoints are downloaded on first use: the Ultralytics
+models into `weights/`, the torchvision models into the PyTorch cache (`~/.cache/torch`).
 
 Add `--skip-existing` to resume after an interruption, or `--stages <names>` to run part of the pipeline
 (`prepare predict finetune predict_ft evaluate benchmark failures analyze sanity`).
@@ -81,7 +90,7 @@ Add `--skip-existing` to resume after an interruption, or `--stages <names>` to 
 ## Method notes
 
 - **Label mapping.** Car → car, Truck → truck, Pedestrian → person are scored. Van, Person_sitting and
-  Cyclist are ignore regions (`iscrowd=1`), following the KITTI devkit's neighbouring-class convention.
+  Cyclist are ignore regions (`iscrowd=1`), following the KITTI devkit's neighboring-class convention.
   Tram and Misc are dropped. See [`docs/taxonomy_mapping.md`](docs/taxonomy_mapping.md).
 - **Fair comparison.** COCO → KITTI comparisons use the same three classes on both sides, never the
   80-class COCO mAP.
@@ -90,14 +99,14 @@ Add `--skip-existing` to resume after an interruption, or `--stages <names>` to 
   0.5 for Faster R-CNN's final per-class NMS (its RPN applies 0.7 to proposals), and 0.6 for FCOS.
   RT-DETR uses no NMS.
 
-## Data and licences
+## Data and licenses
 
 Code is released under the [MIT License](LICENSE). No datasets are stored in this repository;
 `scripts/prepare_data.py` downloads them.
 
 - **KITTI** Vision Benchmark Suite (Geiger, Lenz, Urtasun, CVPR 2012) is licensed CC BY-NC-SA 3.0. The
   annotated example images in `results/failures/` are derived from KITTI and shared under the same
-  licence, for non-commercial academic use.
+  license, for non-commercial academic use.
 - **COCO** (Lin et al., ECCV 2014): annotations are CC BY 4.0; images are subject to Flickr terms.
 
 Developed as a course project for CMPE 249 at San José State University.

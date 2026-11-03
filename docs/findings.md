@@ -1,4 +1,4 @@
-# Key findings (draft for the report)
+# Key findings
 
 Every number below comes from a file in `results/` produced by this pipeline (sanity report:
 109 PASS / 0 WARN / 0 FAIL). "KITTI AP" = AP@[.5:.95] on KITTI val (1,496 imgs) mapped to COCO
@@ -29,7 +29,7 @@ the closed-set models (RT-DETR 46.1 -> 17.4).
 ## F3. Much of the truck drop comes from KITTI's Van class, a side effect of the taxonomy
 Of the confident (score >= 0.3) `truck` boxes the closed-set models output on KITTI,
 **34-48 % land on a KITTI Van** (YOLO11s 157/328, RT-DETR 399/1,172, Faster R-CNN 312/819;
-FCOS 551/3,298 = 17 %, but FCOS outputs far more truck boxes overall). Only 6-20 % hit a real
+FCOS 551/3,298 = 17 %, but FCOS outputs far more truck boxes overall). Only 6-20 % (13-20 % for the three closed-set models above) hit a real
 truck. Vans are ignore regions for `car` only (pycocotools ignores per category), so every van
 called "truck" is a truck false positive.
 **Sensitivity check (main mapping unchanged):** making Van an ignore region for truck as well raises
@@ -131,7 +131,7 @@ Raw outputs: `results/metrics/diagnostics/*.txt`, `results/tables/sensitivity_ta
    only +0.5 more (18.0). It still trails the closed-set models (~20), and the pipeline keeps the
    original prompts (changing them after seeing results would be tuning on the test set).
    (`python scripts/diagnostics/yoloworld_prompts.py`)
-4. **The first benchmark reported YOLO11s at 56.5 ms on COCO, 10x its real cost.** This was a
+4. **The first benchmark reported YOLO11s at 56.5 ms on COCO, about 8x its real cost.** This was a
    one-time setup cost for each new input shape (9/200 imgs up to 1,041 ms, gone on a second
    pass), fixed with warmup = 200 + 3 repeats. Worth one sentence in the report's method section:
    latency measurement needs a protocol, not one loop.

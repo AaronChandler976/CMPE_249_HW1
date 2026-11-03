@@ -133,7 +133,8 @@ def main() -> None:
             style(ax, cls, "", "AP@[.5:.95] (%)" if cls == "person" else "")
             ax.set_xticks(list(x))
             ax.set_xticklabels(names, rotation=20, ha="right", color=INK2)
-        axes[0].legend(frameon=False, labelcolor=INK2, loc="upper right")
+        # truck panel has free space top-right; in the person panel the legend overlapped the bars
+        axes[2].legend(frameon=False, labelcolor=INK2, loc="upper right")
         fig.suptitle("Per-class AP, COCO vs KITTI (no retraining)", x=0.01, ha="left", color=INK,
                      fontweight="bold")
         fig.tight_layout()

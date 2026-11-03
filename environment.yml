@@ -21,6 +21,7 @@ dependencies:
   - vcomp14=14.51.36247
   - wheel=0.48.0
   - pip:
+      - --extra-index-url https://download.pytorch.org/whl/cu128
       - anyio==4.16.0
       - certifi==2026.10.23
       - charset-normalizer==3.5.2
@@ -51,6 +52,7 @@ dependencies:
       - pycocotools==2.0.11
       - pyparsing==3.3.3
       - python-dateutil==4.0.0
+      - pyyaml==6.0.3
       - requests==2.34.2
       - setuptools==78.1.0
       - sympy==1.14.0
@@ -63,3 +65,5 @@ dependencies:
       - ultralytics-platform==0.1.102
       - ultralytics-thop==2.2.4
       - urllib3==2.8.0
+      - tabulate==0.10.0
+      - git+https://github.com/ultralytics/CLIP.git@7ffa84b3bfa40c42ecc1c77147a855e69cb2dd40

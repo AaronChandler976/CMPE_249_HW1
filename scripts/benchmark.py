@@ -4,7 +4,7 @@
   python scripts/benchmark.py --models yolo11s --datasets kitti --n 50
 
 Protocol (state this in the report):
-  * batch 1, FP16 on GPU, same eval thresholds as accuracy runs (conf 0.001 -> worst-case NMS load)
+  * batch 1, FP16 on GPU (FCOS FP32 via models.fcos_r50.half), same eval thresholds as accuracy runs (conf 0.001 -> worst-case NMS load)
   * `warmup` untimed iterations, then `repeats` timed passes over `n_images` images;
     latency_ms_mean = median of the per-pass means (all pass means stored in pass_means_ms)
   * torch.cuda.synchronize() before/after each call; end-to-end = preprocess + model + postprocess
@@ -74,8 +74,8 @@ def main(argv=None) -> None:
     ap.add_argument("--datasets", nargs="*", default=b["datasets"])
     ap.add_argument("--n", type=int, default=b["n_images"])
     ap.add_argument("--warmup", type=int, default=b["warmup"])
-    ap.add_argument("--extra-kitti-1280", action="store_true", default=True,
-                    help="also benchmark yolo11s on KITTI at imgsz 1280 (resolution ablation)")
+    ap.add_argument("--no-kitti-1280", action="store_true",
+                    help="skip the extra yolo11s KITTI imgsz-1280 benchmark (resolution ablation)")
     a = ap.parse_args(argv)
     rows = []
     for d in a.datasets:
@@ -85,7 +85,7 @@ def main(argv=None) -> None:
             except Exception as e:  # one broken model must not kill the whole benchmark
                 log_event("ERROR", stage="benchmark", model=m, dataset=d, error=repr(e))
                 print(f"[ERROR] benchmark {m} on {d}: {e!r}")
-    if a.extra_kitti_1280 and "kitti" in a.datasets and "yolo11s" in a.models:
+    if not a.no_kitti_1280 and "kitti" in a.datasets and "yolo11s" in a.models:
         r = bench_one("yolo11s", "kitti", cfg, a.n, a.warmup, imgsz=1280)
         r["tag"] = "res1280"
         rows.append(r)

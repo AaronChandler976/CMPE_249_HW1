@@ -61,3 +61,16 @@
     #   scripts/failure_analysis.py (van->truck counted as FP-class), scripts/detectors.py + predict.py
     #   (record actual NMS IoU), scripts/diagnostics/bootstrap_ci.py (observed paired difference)
     msedge --headless=new --no-pdf-header-footer --print-to-pdf=docs/report/report.pdf docs/report/report.html
+    # fourth revision (2026-11-02, pre-submission review, nothing re-run): report wording fixes
+    # (YOLO-World not COCO-trained, miss counts, significance wording, abbreviations, 9 pages);
+    # absolute repo path replaced by <repo> in results/run_log.jsonl and results/metrics/finetune/*;
+    # nvidia-smi process list removed from results/hardware.txt (CPU/RAM added); environment files
+    # made installable (PyTorch cu128 index, PyYAML, tabulate, pinned CLIP commit).
+    # Code fixes NOT re-run: scripts/common.py (argv captured once, paths scrubbed in the log),
+    # scripts/finetune.py (scrubbed args.yaml), scripts/benchmark.py (--no-kitti-1280),
+    # scripts/analyze.py (Figure 1 legend moved to the truck panel; PNG not regenerated).
+    msedge --headless=new --no-pdf-header-footer --print-to-pdf=docs/report/report.pdf docs/report/report.html
+
+Note: in results/run_log.jsonl the `argv` field is unreliable for stages called from run_all.py
+(run_all.py rewrote sys.argv before calling each stage, so e.g. predict events show
+`prepare_data.py --quick`). The `command` field in results/run_meta/*.json is authoritative.

@@ -4,6 +4,9 @@ weights/
 runs/
 results/predictions/
 *.pt
+*.pth
+*.onnx
+*.engine
 *.zip
 datasets/
 

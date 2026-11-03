@@ -1,7 +1,7 @@
 """One command for the whole experiment pipeline.
 
-  python run_all.py --quick                     # ~5 min smoke test (25 images, 1-epoch fine-tune)
-  python run_all.py                             # full run (~2-3 h on an RTX 5070 Ti, mostly fine-tuning)
+  python run_all.py --quick                     # ~2.5 min smoke test (25 images, 1-epoch fine-tune)
+  python run_all.py                             # full run (~1-1.5 h on an RTX 5070 Ti incl. ~25 min fine-tuning)
   python run_all.py --stages predict evaluate   # re-run selected stages
   python run_all.py --skip-existing             # resume after a crash without redoing finished runs
 
