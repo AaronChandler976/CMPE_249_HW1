@@ -55,7 +55,7 @@ points. The drop is <i>class-specific</i>: car is essentially unchanged while pe
 Medium and large objects lose 32&ndash;60% of their COCO AP for every model, so the gap is not only about small
 objects. Vans being labelled "truck" account for 22&ndash;56% of the closed-set models' truck loss. The 11-point
 spread between models on the same three COCO classes shrinks to 4.4 points on KITTI, where most differences are
-within bootstrap confidence intervals. Twenty-five minutes of fine-tuning raises KITTI AP from 24.6 to 71.6. All
+not statistically significant. Twenty-five minutes of fine-tuning raises KITTI AP from 24.6 to 71.6. All
 five models run in real time at batch 1 on an RTX 5070 Ti (5&ndash;19 ms per KITTI image).</div>
 
 <h2>1. Question and approach</h2>
@@ -186,7 +186,7 @@ therefore box placement that does not match KITTI's annotation convention, which
 from per-class AP50/AP75 in <code>results/metrics/*.json</code>.)</p>
 
 <p><b>Truck and vans (a mapping side effect).</b> Of the confident (score&nbsp;&ge;&nbsp;0.3) "truck" boxes, 48% (YOLO11s),
-34% (RT-DETR) and 38% (Faster R-CNN) lie on a KITTI <i>van</i>. Only 13&ndash;20% hit a real truck. Because pycocotools
+34% (RT-DETR) and 38% (Faster R-CNN) lie at least half inside a KITTI <i>van</i> box. Only 13&ndash;20% hit a real truck. Because pycocotools
 applies ignore regions per category, and vans are ignored for <i>car</i> only, each such box is a truck false
 positive. A sensitivity check (Table 5) also marks vans as ignore regions for truck. Truck AP then rises by
 5.7&ndash;11.1 points for every zero-shot model, which is 22&ndash;56% of the closed-set models' COCO&rarr;KITTI truck
@@ -223,7 +223,7 @@ overall. Pixels help small objects, but most of the gap lies elsewhere.</p>
 <div class="blk"><table>
 <tr><th>Model</th><th>KITTI latency ms (range)</th><th>FPS</th><th>Peak mem MB</th><th>KITTI AP</th><th>COCO latency ms (range)</th><th>COCO peak MB</th><th>COCO AP</th></tr>
 <tr><td>YOLO11s</td><td><b>5.0</b> (5.0&ndash;5.0)</td><td>200</td><td>72</td><td>24.6</td><td>7.2 (6.9&ndash;7.6)</td><td>71</td><td>45.6</td></tr>
-<tr><td>YOLO-World-S v2</td><td>5.4 (5.4&ndash;5.4)</td><td>185</td><td>144</td><td>28.8</td><td>6.2 (6.2&ndash;6.4)</td><td>81</td><td>36.8</td></tr>
+<tr><td>YOLO-World-S v2</td><td>5.4 (5.4&ndash;5.4)</td><td>185</td><td>143</td><td>28.8</td><td>6.2 (6.2&ndash;6.4)</td><td>81</td><td>36.8</td></tr>
 <tr><td>RT-DETR-L</td><td>12.2 (12.2&ndash;12.3)</td><td>82</td><td>173</td><td>29.0</td><td>16.7 (13.7&ndash;18.8)</td><td>143</td><td>52.8</td></tr>
 <tr><td>Faster R-CNN v2</td><td>16.4 (16.2&ndash;16.6)</td><td>61</td><td>488</td><td>28.3</td><td>19.4 (19.3&ndash;19.7)</td><td>637</td><td>47.0</td></tr>
 <tr><td>FCOS (FP32)</td><td>18.8 (18.7&ndash;19.2)</td><td>53</td><td>391</td><td>28.7</td><td>25.6 (25.5&ndash;26.2)</td><td>501</td><td>39.3</td></tr>
@@ -231,7 +231,7 @@ overall. Pixels help small objects, but most of the gap lies elsewhere.</p>
 <div class="cap"><b>Table 7.</b> Speed and memory, batch 1, median of 3 passes &times; 200 images (<code>results/tables/benchmark.md</code>). Latency is end-to-end and includes each framework's own preprocessing and input size, so it compares deployable pipelines rather than bare networks. FCOS runs FP32, the others FP16. The fine-tuned YOLO11s was not benchmarked separately: it shares YOLO11s's architecture and input size, and only its class head differs.</div></div>
 <figure style="width:72%;margin:5pt auto 0"><img src="../../results/figures/speed_accuracy.png" alt="Speed vs accuracy on KITTI"></figure>
 <div class="cap"><b>Figure 3.</b> KITTI latency vs KITTI AP. KITTI latencies are used because they are stable to &plusmn;0.5 ms across passes. COCO latencies vary by up to 5 ms on Windows/WDDM with variable input shapes.</div>
-<p><b>Speed.</b> On this GPU every model is real-time (&gt;50 FPS). The one-stage YOLOs are
+<p><b>Speed.</b> On KITTI every model runs in real time on this GPU (&gt;50 FPS). The one-stage YOLOs are
 3.0&ndash;3.8&times; faster than the R50-FPN models, which also process about 4&times; as many pixels per KITTI image (see below) and use 2.7&ndash;6.8&times; the peak memory.</p>
 <p><b>Accuracy rankings do not transfer.</b> On the same three classes, the 11.0-AP spread on COCO (41.6&ndash;52.6)
 shrinks to 4.4 AP on KITTI. A paired bootstrap (same resampled images for both models) finds Faster R-CNN, FCOS
@@ -241,7 +241,7 @@ were tested. Only YOLO11s is clearly worse, at &minus;4.4 [&minus;5.5, &minus;3.
 point estimates; <code>results/tables/bootstrap_ci.md</code> lists bootstrap means, which differ by &le;0.1.) The zero-shot point
 estimates also sit in the lower half of their own intervals, suggesting that resampling inflates AP slightly. YOLO-World is
 <i>last</i> on COCO but statistically indistinguishable from the best on KITTI, at less than half RT-DETR's latency,
-so it sits on the speed&ndash;accuracy frontier together with YOLO11s.</p>
+so together with YOLO11s and RT-DETR it forms the speed&ndash;accuracy frontier (Figure 3); RT-DETR&rsquo;s 0.2-AP lead over it is not significant.</p>
 <p><b>Input resolution is a confound in this comparison.</b> A 1242&times;375 KITTI image is resized to about
 1333&times;402 by torchvision (1.07&times; native) but to 640&times;193 for the Ultralytics models (0.52&times;), so
 Faster R-CNN and FCOS see roughly 4&times; more pixels. The YOLO11s 1280 ablation (Table 6: AP<sub>S</sub>
@@ -275,7 +275,7 @@ domain-specific categories (cyclist, tram).</p>
 <tr><td>Missed GT @conf 0.3*</td><td>1,862</td><td>484</td></tr>
 <tr><td>Background FPs @conf 0.3*</td><td>1,182</td><td>281</td></tr>
 </table>
-<div class="cap"><b>Table 8.</b> Fine-tuning (<code>results/tables/finetune.md</code>, <code>results/failures/*/summary.json</code>). For comparison, YOLO-World zero-shot reaches 15.3 native 7-class AP. *Counts at a fixed confidence depend on score calibration, which fine-tuning changes, so they illustrate the shift; the AP rows are the threshold-free comparison. The zero-shot background count includes 157 van&rarr;truck boxes (see Table 9). Native per-class AP of the fine-tuned model: car 80.9, van 77.1, truck 83.9, pedestrian 49.7, person_sitting 43.3, cyclist 60.4, tram 74.9.</div>
+<div class="cap"><b>Table 8.</b> Fine-tuning (<code>results/tables/finetune.md</code>, <code>results/failures/*/summary.json</code>). For comparison, YOLO-World zero-shot reaches 15.3 native 7-class AP. *Counts at a fixed confidence depend on score calibration, which fine-tuning changes, so they illustrate the shift; the AP rows are the threshold-free comparison. The zero-shot background count includes up to 157 van&rarr;truck boxes (see Table 9). Native per-class AP of the fine-tuned model: car 80.9, van 77.1, truck 83.9, pedestrian 49.7, person_sitting 43.3, cyclist 60.4, tram 74.9.</div>
 </div>
 <figure style="flex:1"><img src="../../results/figures/finetune_native.png" alt="Native KITTI per-class AP"><div class="cap"><b>Figure 4a.</b> Native 7-class AP: open-vocabulary zero-shot vs fine-tuned.</div></figure>
 </div>
@@ -289,7 +289,7 @@ data moved it by 47. <b>Caveat:</b> train and val share no files, but KITTI fram
 driving sequences, so frames of the same drive very likely appear in both splits. 71.6 is therefore an optimistic
 estimate compared with a sequence-level split.</p>
 <div class="blk"><figure style="width:70%;margin:4pt auto 0"><img src="../../results/figures/finetune_curve.png" alt="Fine-tuning validation curve"></figure>
-<div class="cap"><b>Figure 4b.</b> Ultralytics' per-epoch validation mAP (7 native classes, its own evaluator, so not identical to the pycocotools numbers above) (<code>results/metrics/finetune/results.csv</code>). mAP@[.5:.95] was still rising slowly at the end (67.0 at epoch 40, 68.3 at epoch 50) while the learning rate decayed towards zero, so longer training might add a little; 50 epochs is a budget choice, not a converged optimum.</div></div>
+<div class="cap"><b>Figure 4b.</b> Ultralytics' per-epoch validation mAP (all 8 trained classes including Misc, its own evaluator, so not identical to the pycocotools numbers above) (<code>results/metrics/finetune/results.csv</code>). mAP@[.5:.95] was still rising slowly at the end (67.0 at epoch 40, 68.3 at epoch 50) while the learning rate decayed towards zero, so longer training might add a little; 50 epochs is a budget choice, not a converged optimum.</div></div>
 
 <h2>7. Failure analysis</h2>
 <p>Each prediction (conf&nbsp;&ge;&nbsp;0.3) and GT box was classified with a light TIDE-style [12] taxonomy at IoU 0.5:
@@ -303,7 +303,7 @@ predictions on ignore regions skipped (Table 9). It covers one zero-shot model f
 <tr><td>Faster R-CNN zero-shot</td><td>5,728</td><td>1,132</td><td>8,193</td><td>2,179</td><td>132</td><td>119</td><td>0.46</td><td>0.44</td></tr>
 <tr><td>YOLO11s fine-tuned</td><td>6,376</td><td>484</td><td>281</td><td>315</td><td>4</td><td>173</td><td>0.46</td><td>0.97</td></tr>
 </table>
-<div class="cap"><b>Table 9.</b> Error breakdown over 6,860 scored GT boxes (<code>results/failures/*/summary.json</code>). A fixed conf of 0.3 is a different operating point for each model, because score calibration differs. Compare counts within a model, not across models. <b>Known defect:</b> the script only checks non-ignored GT for class confusion, so a "truck" box on a van (an ignore region for <i>car</i>) is counted as FP-background, not FP-class. By the diagnostic count, that is 157 (YOLO11s), 399 (RT-DETR) and 312 (Faster R-CNN) boxes. The script has since been corrected but not re-run, so the FP-class column is too low and FP-background too high by about those amounts.</div>
+<div class="cap"><b>Table 9.</b> Error breakdown over 6,860 scored GT boxes (<code>results/failures/*/summary.json</code>). A fixed conf of 0.3 is a different operating point for each model, because score calibration differs. Compare counts within a model, not across models. <b>Known defect:</b> the script only checks non-ignored GT for class confusion, so a "truck" box on a van (an ignore region for <i>car</i>) is mostly counted as FP-background, not FP-class. By the diagnostic count (confident truck boxes at least half inside a van), that is up to 157 (YOLO11s), 399 (RT-DETR) and 312 (Faster R-CNN) boxes. The script has since been corrected but not re-run, so the FP-class column is too low and FP-background too high by up to about those amounts.</div>
 <div class="two">
 <figure><img src="../../results/failures/yolo11s__kitti/019err_000535.jpg" alt="YOLO11s failure example"><div class="cap"><b>Figure 5a.</b> YOLO11s, image 000535. A clearly visible pedestrian scored 0.74 is counted as <i>FP-background</i> because KITTI did not label him. The crowded group yields misses (thick orange) and loose boxes (FP-loc).</div></figure>
 <figure><img src="../../results/failures/frcnn_r50_v2__kitti/044err_000845.jpg" alt="Faster R-CNN failure example"><div class="cap"><b>Figure 5b.</b> Faster R-CNN, image 000845. Most red "background" FPs on the right are real parked cars behind a hedge and a person with a cart, all unlabelled. Heavily occluded parked cars on the left are missed.</div></figure>
@@ -313,7 +313,7 @@ RT-DETR and Faster R-CNN</i> (background FPs 4,032 and 8,193 vs 1,221 and 1,132 
 score calibration at conf 0.3). The misses are mainly small and occluded pedestrians (zero-shot YOLO11s finds 14% of small
 persons) and trucks (1 of 34 small trucks). Fine-tuning recovers most cars and trucks, but small pedestrians remain
 the hardest case even after training (46%). (ii) <i>Class confusion is larger than the FP-class column shows.</i> The main confusion is van&rarr;truck
-(Section 6.1), and because of the defect noted under Table 9 those 157&ndash;399 boxes per model are counted as
+(Section 6.1), and because of the defect noted under Table 9 most of those 157&ndash;399 boxes per model are counted as
 background FPs. (iii) <i>"Background" false positives are partly a ground-truth artefact.</i>
 Without DontCare regions, real but unlabelled distant or occluded objects are scored as hallucinations
 (Figure 5), so zero-shot precision is somewhat underestimated for every model. (iv) <i>Rows of overlapping parked
@@ -340,8 +340,8 @@ fine-tuning run (seed 0), and only the smallest YOLO size was fine-tuned.</p>
 
 <h2>10. Conclusions</h2>
 <ol>
-<li><b>COCO skill transfers unevenly.</b> On the shared classes, KITTI AP is 13&ndash;24 points lower, but car transfers almost perfectly while person and truck collapse. Reporting only mAP would hide this.</li>
-<li><b>The gap is not mainly about pixels or architecture.</b> Medium and large objects lose 32&ndash;60% of their AP, higher resolution recovers only 2.3 AP, and three of the other four architectures are not significantly different from RT-DETR on KITTI. Our interpretation is that label conventions (van vs truck, how pedestrians are boxed), domain appearance and missing labels matter more than the choice of detector. Van confusion alone explains 22&ndash;56% of the truck loss.</li>
+<li><b>COCO skill transfers unevenly.</b> On the shared classes, KITTI AP is 13&ndash;24 points lower, but car transfers almost perfectly while person (and, for the closed-set models, truck) collapses. Reporting only mAP would hide this.</li>
+<li><b>The gap is not mainly about pixels or architecture.</b> Medium and large objects lose 32&ndash;60% of their AP, higher resolution recovers only 2.3 AP, and three of the other four architectures are not significantly different from RT-DETR on KITTI. Our interpretation is that label conventions (van vs truck, how pedestrians are boxed), domain appearance and missing labels matter more than the choice of detector. Van confusion alone explains 22&ndash;56% of the closed-set models' truck loss.</li>
 <li><b>COCO rankings are a poor guide out of domain.</b> The model that is last on COCO's person/car/truck (YOLO-World) is statistically indistinguishable from the best on KITTI, and YOLO11s, third on COCO, is the only significantly worse model.</li>
 <li><b>In-domain data dominates.</b> Twenty-five minutes of fine-tuning (24.6&rarr;71.6) is worth roughly ten times the spread between architectures. For a robot, the practical recipe is a fast detector (5 ms) fine-tuned on the target domain, with per-class and per-scale evaluation, especially recall on small pedestrians, which remains the weakest point even after fine-tuning.</li>
 <li><b>Rigor matters.</b> Reproducing known numbers first, gating results with automated checks, and testing hypotheses with targeted experiments caught one wrong model setting and one timing artefact. It also refuted one of the study's own explanations: YOLO-World's "van" prompt does not explain its truck lead.</li>

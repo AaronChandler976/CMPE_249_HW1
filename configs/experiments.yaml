@@ -76,7 +76,7 @@ models:
     family: "One-stage, anchor-free, dense (FCOS)"
     impl: torchvision
     arch: fcos_resnet50_fpn
-    half: false                  # FP16 autocast costs ~7 AP on COCO (31.3 vs 39.2 ref); see docs/findings.md (Surprise 1)
+    half: false                  # FP16 autocast costs ~8 AP on COCO (31.3 vs 39.2 ref); see docs/findings.md (Surprise 1)
     imgsz: "min800/max1333"
     label_space: coco
     reference_coco_map: 39.2     # torchvision weights table

@@ -3,7 +3,7 @@
 Every number below comes from a file in `results/` produced by this pipeline (sanity report:
 109 PASS / 0 WARN / 0 FAIL). "KITTI AP" = AP@[.5:.95] on KITTI val (1,496 imgs) mapped to COCO
 {person, car, truck}; "COCO 3-cls AP" = the same three classes on COCO val2017, so the two are
-comparable (`docs/taxonomy_mapping.md`). Two numbers (F4, F7) come from one-off diagnostic
+comparable (`docs/taxonomy_mapping.md`). Numbers in F3 and in the Surprises section come from one-off diagnostic
 scripts. They are marked as such, and the scripts are in `scripts/diagnostics/`, commands in `docs/commands.md`.
 
 ---
@@ -48,7 +48,7 @@ counts from `scripts/diagnostics/truck_on_van.py` over `results/predictions/*.js
 ## F4. Medium and large objects drop sharply for every model, so the shift is not mainly "KITTI objects are small"
 (Corrected after review: an earlier version said large objects drop "nearly as much as small ones".)
 Relative COCO 3-cls -> KITTI drop: **medium 45-60 %, large 32-47 % for every model** (e.g. YOLO11s
-large 69.6 -> 36.8). Small objects vary widely: 2 % for YOLO-World (24.0 -> 23.7) up to 58 % for Faster
+large 69.6 -> 36.8). Small objects vary widely: 1 % for YOLO-World (24.0 -> 23.7) up to 58 % for Faster
 R-CNN (36.3 -> 15.3). Also, most KITTI GT is **medium** by COCO area
 thresholds (e.g. cars 17 % small / 53 % medium / 30 % large, `results/dataset_stats.json`).
 **Source:** `results/tables/domain_shift_scale.md`, `results/figures/domain_shift_scale.png`.
@@ -86,7 +86,7 @@ both, so 71.6 is optimistic vs. a sequence-level split (not verified per file).
 
 ## F7. Failure modes: misses and "background" FPs are the largest error types; many of those FPs are real but unlabelled objects
 At conf 0.3 / IoU 0.5, zero-shot YOLO11s: TP 4,998, FN 1,862, FP-background 1,182, FP-loc 760,
-FP-duplicate 134, FP-class 55. (FP-class undercounts confusion: van->truck boxes land in FP-background, see report Table 9.) Worst recall: truck/small 1/34, person/small
+FP-duplicate 134, FP-class 55. (FP-class undercounts confusion: van->truck boxes mostly land in FP-background, see report Table 9.) Worst recall: truck/small 1/34, person/small
 0.14. Faster R-CNN logs 8,193 FP-background at the same threshold.
 Visual inspection shows many "background" FPs are **real, unlabelled objects**: a pedestrian scored
 0.74 in `results/failures/yolo11s__kitti/019err_000535.jpg`, and a row of parked cars behind a hedge
@@ -96,12 +96,12 @@ from the Ultralytics release). Occluded rows of parked cars are the typical miss
 **Caveat:** a fixed conf 0.3 is not the same operating point for every model, because scores are
 calibrated differently. Compare FP counts *within* a model (zero-shot vs fine-tuned), not across models.
 
-## F8. Speed-accuracy: on this GPU all models are real-time, and the one-stage YOLOs dominate on KITTI
+## F8. Speed-accuracy: on KITTI all models are real-time on this GPU, and the one-stage YOLOs are fastest
 KITTI, batch 1 (median of 3 passes x 200 imgs): YOLO11s 5.0 ms, YOLO-World 5.4, RT-DETR-L 12.2,
 Faster R-CNN 16.4, FCOS 18.8 (FP32, see below). Peak memory 72-173 MB for the 640-px models vs
 391-488 MB for the torchvision R50-FPN models (~1333x402 px input on KITTI).
 YOLO-World gives about RT-DETR's KITTI AP (28.8 vs 29.0) at less than half the latency.
-**Source:** `results/tables/benchmark.md`, `results/figures/speed_accuracy.png` (COCO).
+**Source:** `results/tables/benchmark.md`, `results/figures/speed_accuracy.png` (KITTI).
 **Caveats:** FCOS runs FP32 (Surprise 1) and the others FP16, so its latency is not like-for-like.
 COCO latencies vary between passes by up to 5 ms on Windows/WDDM (RT-DETR 13.7-18.8), while KITTI
 passes agree within 0.5 ms, so quote KITTI latencies. Pipeline differences (Ultralytics vs
@@ -112,7 +112,7 @@ torchvision preprocessing, input size) are part of what is measured.
 ## Surprises, with the verification experiments run on 2026-11-01
 Raw outputs: `results/metrics/diagnostics/*.txt`, `results/tables/sensitivity_taxonomy.md`.
 
-1. **FP16 cost FCOS 7.9 AP on COCO (31.3 vs 39.3) but ~0 on KITTI (28.6 vs 28.7). CONFIRMED:
+1. **FP16 cost FCOS 8.0 AP on COCO (31.3 vs 39.3) but ~0 on KITTI (28.6 vs 28.7). CONFIRMED:
    the loss is entirely outside person/car/truck.** Full COCO val, FP16 vs FP32: person 53.4/53.5,
    car 42.2/42.4, truck 34.3/34.3, while the mean AP of the other 77 classes is **30.8 vs 39.2**
    (-8.4). Thresholds change < 0.3 AP. KITTI scores only the three unaffected classes, so it did not
@@ -132,7 +132,7 @@ Raw outputs: `results/metrics/diagnostics/*.txt`, `results/tables/sensitivity_ta
    original prompts (changing them after seeing results would be tuning on the test set).
    (`python scripts/diagnostics/yoloworld_prompts.py`)
 4. **The first benchmark reported YOLO11s at 56.5 ms on COCO, 10x its real cost.** This was a
-   one-time setup cost for each new input shape (9/200 imgs up to 1,046 ms, gone on a second
+   one-time setup cost for each new input shape (9/200 imgs up to 1,041 ms, gone on a second
    pass), fixed with warmup = 200 + 3 repeats. Worth one sentence in the report's method section:
    latency measurement needs a protocol, not one loop.
 

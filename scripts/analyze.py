@@ -222,7 +222,7 @@ def main() -> None:
         fig.savefig(FIG_DIR / "finetune_native.png", dpi=200)
         plt.close(fig)
 
-    # ---------------- fine-tuning curve (Ultralytics' own per-epoch validation, 7 native classes)
+    # ---------------- fine-tuning curve (Ultralytics' own per-epoch validation, all 8 trained classes incl. misc)
     curve = METRIC_DIR / "finetune" / "results.csv"
     if curve.exists():
         h = pd.read_csv(curve)

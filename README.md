@@ -48,7 +48,7 @@ Sources: `results/tables/main_results.md`, `results/tables/bootstrap_ci.md`, `re
 │   ├── sanity_checks.py       # automated checks that gate every result
 │   └── diagnostics/           # targeted verification experiments cited in the report
 ├── results/
-│   ├── tables/                # every number in the report (Markdown + CSV)
+│   ├── tables/                # summary tables behind the report (Markdown + CSV)
 │   ├── figures/               # report figures
 │   ├── metrics/               # raw evaluation output per run
 │   ├── failures/              # error taxonomy and annotated images per run
@@ -70,7 +70,7 @@ conda env create -f environment.yml
 conda activate detection-transfer
 pip install git+https://github.com/ultralytics/CLIP.git tabulate
 
-python run_all.py --quick          # ~5-minute smoke test on a few images
+python run_all.py --quick          # ~2.5-minute smoke test (25 images per run)
 python run_all.py                  # full pipeline (~1-1.5 h): data, inference, fine-tuning, evaluation
 python scripts/sanity_checks.py    # must report FAIL=0
 ```

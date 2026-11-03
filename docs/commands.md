@@ -56,3 +56,8 @@
     python scripts/analyze.py                            # adds results/figures/finetune_curve.png (Fig. 4b)
     # second revision after a first-pass review against the assignment (10 fixes); PDF re-printed, 9 pages
     # repo cleanup: README rewrite, MIT LICENSE, assistant tooling and study notes untracked, repo renamed to zero-shot-detection-transfer
+    # third revision (2026-11-02, no GPU machine available, nothing re-run): NMS defaults per framework,
+    # resolution confound, KITTI disclaimer, grader fixes; code fixes NOT re-run:
+    #   scripts/failure_analysis.py (van->truck counted as FP-class), scripts/detectors.py + predict.py
+    #   (record actual NMS IoU), scripts/diagnostics/bootstrap_ci.py (observed paired difference)
+    msedge --headless=new --no-pdf-header-footer --print-to-pdf=docs/report/report.pdf docs/report/report.html
