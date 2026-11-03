@@ -137,7 +137,11 @@ python run_all.py --stages predict evaluate                  # 5 models x {COCO,
 python run_all.py --stages finetune predict_ft evaluate      # fine-tune YOLO11s on KITTI (29 min)
 python run_all.py --stages benchmark failures analyze sanity # latency/memory, error analysis, tables, checks
 # per-run equivalent, e.g.:  python scripts/predict.py --model yolo11s --dataset kitti --imgsz 1280 --tag res1280
-#                            python scripts/evaluate.py --run yolo11s__kitti --target kitti_cocomap</pre>
+#                            python scripts/evaluate.py --run yolo11s__kitti --target kitti_cocomap
+#                            python scripts/finetune.py   # model.train() with the finetune: block of experiments.yaml</pre>
+<p>The exact command for every inference run is stored in the <code>command</code> field of its
+<code>results/run_meta/*.json</code>. The fine-tuning arguments, as resolved by Ultralytics, are in
+<code>results/metrics/finetune/args.yaml</code>.</p>
 
 <h2>5. Results</h2>
 <p>Table 3 lists every run. Read the two COCO AP columns first: they show that the harness reproduces the
@@ -152,7 +156,7 @@ published numbers, which is the precondition for trusting the KITTI columns.</p>
 <tr><td>YOLO11s @1280</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>26.9</td><td style="white-space:nowrap">25.6&ndash;28.8</td><td>51.0</td><td>25.1</td><td>21.9</td><td>25.2</td><td>36.3</td><td>47.0</td></tr>
 <tr><td>YOLO11s-KITTI (fine-tuned)</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td><b>71.6</b></td><td style="white-space:nowrap">70.3&ndash;72.9</td><td><b>93.0</b></td><td><b>80.2</b></td><td><b>58.3</b></td><td><b>71.4</b></td><td><b>80.7</b></td><td><b>77.1</b></td></tr>
 </table>
-<div class="cap"><b>Table 3.</b> Main results (AP@[.5:.95] in %, unless noted). COCO: 80 classes, 5,000 images. KITTI: person/car/truck, 1,496 val images, zero-shot except the last row. Every published COCO mAP is reproduced to within 1.4 AP, which validates id mapping, coordinates and thresholds before any KITTI number is interpreted. The largest gap (YOLO11s, &minus;1.4) is inside the 2-AP tolerance; its cause was not investigated (candidates: differences between Ultralytics' own validator and this harness, and FP16). Bold = best in column (the fine-tuned model). 95% CI = percentile interval from 1,000 image-level bootstrap [19] resamples of KITTI val (<code>results/tables/bootstrap_ci.md</code>); paired comparisons are in &sect;6.2. Source: <code>results/tables/main_results.md</code>, <code>results/sanity_report.md</code>.</div>
+<div class="cap"><b>Table 3.</b> Main results (AP@[.5:.95] in %, unless noted). COCO: 80 classes, 5,000 images. KITTI: person/car/truck, 1,496 val images, zero-shot except the last row. Every published COCO mAP is reproduced to within 1.4 AP, which validates id mapping, coordinates and thresholds before any KITTI number is interpreted. The largest gap (YOLO11s, &minus;1.4) is inside the 2-AP tolerance; its cause was not investigated (candidates: differences between Ultralytics' own validator and this harness, and FP16). Bold = best in column (the fine-tuned model). 95% CI = percentile interval from 1,000 image-level bootstrap [19] resamples of KITTI val (<code>results/tables/bootstrap_ci.md</code>); paired comparisons are in &sect;6.2. COCO (80-class) AP75/AP<sub>S</sub>/AP<sub>M</sub>/AP<sub>L</sub>: YOLO11s 49.3/27.8/50.1/62.5, RT-DETR-L 57.1/34.3/57.3/70.9, Faster R-CNN v2 51.3/31.2/50.8/60.4, FCOS 42.1/22.5/42.5/51.4, YOLO-World-S v2 39.8/20.6/40.5/48.9. Source: <code>results/tables/main_results.md</code>, <code>results/sanity_report.md</code>.</div>
 
 <h2>6. Analyses</h2>
 <h3>6.1 Cross-dataset generalization: which classes and scales degrade?</h3>
