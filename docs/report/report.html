@@ -238,7 +238,7 @@ shrinks to 4.4 AP on KITTI. A paired bootstrap (same resampled images for both m
 and YOLO-World <i>not significantly different</i> from RT-DETR: each difference has a 95% interval containing 0,
 e.g. YOLO-World &minus;0.2 [&minus;1.7, +1.4]. This does not prove they are equal, and only differences to RT-DETR
 were tested. Only YOLO11s is clearly worse, at &minus;4.4 [&minus;5.5, &minus;3.3]. (Differences are the observed
-point estimates; <code>bootstrap_ci.md</code> lists bootstrap means, which differ by &le;0.1.) The zero-shot point
+point estimates; <code>results/tables/bootstrap_ci.md</code> lists bootstrap means, which differ by &le;0.1.) The zero-shot point
 estimates also sit in the lower half of their own intervals, suggesting that resampling inflates AP slightly. YOLO-World is
 <i>last</i> on COCO but statistically indistinguishable from the best on KITTI, at less than half RT-DETR's latency,
 so it sits on the speed&ndash;accuracy frontier together with YOLO11s.</p>
@@ -275,7 +275,7 @@ domain-specific categories (cyclist, tram).</p>
 <tr><td>Missed GT @conf 0.3*</td><td>1,862</td><td>484</td></tr>
 <tr><td>Background FPs @conf 0.3*</td><td>1,182</td><td>281</td></tr>
 </table>
-<div class="cap"><b>Table 8.</b> Fine-tuning (<code>results/tables/finetune.md</code>, <code>results/failures/*/summary.json</code>). For comparison, YOLO-World zero-shot reaches 15.3 native 7-class AP. *Counts at a fixed confidence depend on score calibration, which fine-tuning changes, so they illustrate the shift; the AP rows are the threshold-free comparison. Native per-class AP of the fine-tuned model: car 80.9, van 77.1, truck 83.9, pedestrian 49.7, person_sitting 43.3, cyclist 60.4, tram 74.9.</div>
+<div class="cap"><b>Table 8.</b> Fine-tuning (<code>results/tables/finetune.md</code>, <code>results/failures/*/summary.json</code>). For comparison, YOLO-World zero-shot reaches 15.3 native 7-class AP. *Counts at a fixed confidence depend on score calibration, which fine-tuning changes, so they illustrate the shift; the AP rows are the threshold-free comparison. The zero-shot background count includes 157 van&rarr;truck boxes (see Table 9). Native per-class AP of the fine-tuned model: car 80.9, van 77.1, truck 83.9, pedestrian 49.7, person_sitting 43.3, cyclist 60.4, tram 74.9.</div>
 </div>
 <figure style="flex:1"><img src="../../results/figures/finetune_native.png" alt="Native KITTI per-class AP"><div class="cap"><b>Figure 4a.</b> Native 7-class AP: open-vocabulary zero-shot vs fine-tuned.</div></figure>
 </div>

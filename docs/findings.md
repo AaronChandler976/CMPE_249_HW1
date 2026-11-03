@@ -61,10 +61,10 @@ annotation/definition differences (F2, F3, F6) rather than resolution.
 (Corrected after review: an earlier version compared the 80-class COCO spread, 16 pts, with 3-class
 KITTI, which is exactly the unfair comparison the method rules out.)
 COCO 3-cls AP ranges 41.6 (YOLO-World) to 52.6 (RT-DETR-L). KITTI AP ranges 24.6 (YOLO11s) to
-29.0 (RT-DETR-L). A paired image bootstrap (B=1000) finds RT-DETR, Faster R-CNN, FCOS and YOLO-World
-**statistically tied** on KITTI (all differences vs RT-DETR have 95 % CIs containing 0, e.g. YOLO-World
--0.1 [-1.7, +1.4]). Only YOLO11s is significantly worse, at -4.3 [-5.5, -3.3]. YOLO-World is last on
-COCO's 3 classes but tied for best on KITTI.
+29.0 (RT-DETR-L). A paired image bootstrap (B=1000) finds Faster R-CNN, FCOS and YOLO-World
+**not significantly different** from RT-DETR on KITTI (95 % CIs of the differences contain 0, e.g. YOLO-World
+-0.2 [-1.7, +1.4], observed difference). Only YOLO11s is significantly worse, at -4.4 [-5.5, -3.3]. YOLO-World is last on
+COCO's 3 classes but statistically indistinguishable from the best on KITTI.
 **Source:** `results/tables/domain_shift.md`, `results/tables/bootstrap_ci.md`.
 **Interpretation:** benchmark rank on the training distribution is a poor predictor of
 out-of-domain rank. Truck AP CIs are 6-10 pts wide (223 boxes), and the 3-class mean gives truck
@@ -84,9 +84,9 @@ drawn), not model capacity. **Caveats:** train/val share 0 files, and best.pt = 
 selection gain). But KITTI's image-level split very likely places frames of the same drives in
 both, so 71.6 is optimistic vs. a sequence-level split (not verified per file).
 
-## F7. Failure modes: misses and "background" FPs dominate, and many of those FPs are real but unlabelled objects
+## F7. Failure modes: misses and "background" FPs are the largest error types; many of those FPs are real but unlabelled objects
 At conf 0.3 / IoU 0.5, zero-shot YOLO11s: TP 4,998, FN 1,862, FP-background 1,182, FP-loc 760,
-FP-duplicate 134, FP-class 55. Class confusion is rare. Worst recall: truck/small 1/34, person/small
+FP-duplicate 134, FP-class 55. (FP-class undercounts confusion: van->truck boxes land in FP-background, see report Table 9.) Worst recall: truck/small 1/34, person/small
 0.14. Faster R-CNN logs 8,193 FP-background at the same threshold.
 Visual inspection shows many "background" FPs are **real, unlabelled objects**: a pedestrian scored
 0.74 in `results/failures/yolo11s__kitti/019err_000535.jpg`, and a row of parked cars behind a hedge
@@ -99,7 +99,7 @@ calibrated differently. Compare FP counts *within* a model (zero-shot vs fine-tu
 ## F8. Speed-accuracy: on this GPU all models are real-time, and the one-stage YOLOs dominate on KITTI
 KITTI, batch 1 (median of 3 passes x 200 imgs): YOLO11s 5.0 ms, YOLO-World 5.4, RT-DETR-L 12.2,
 Faster R-CNN 16.4, FCOS 18.8 (FP32, see below). Peak memory 72-173 MB for the 640-px models vs
-391-488 MB for the torchvision R50-FPN models (~800 px input).
+391-488 MB for the torchvision R50-FPN models (~1333x402 px input on KITTI).
 YOLO-World gives about RT-DETR's KITTI AP (28.8 vs 29.0) at less than half the latency.
 **Source:** `results/tables/benchmark.md`, `results/figures/speed_accuracy.png` (COCO).
 **Caveats:** FCOS runs FP32 (Surprise 1) and the others FP16, so its latency is not like-for-like.

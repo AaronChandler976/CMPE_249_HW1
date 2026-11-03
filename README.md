@@ -26,7 +26,7 @@ RTX 5070 Ti.
 
 - **Transfer is class-specific.** Car AP barely moves, while person drops 33–44 points for every model.
 - **Architecture matters less than data.** The 11-point spread between models on COCO shrinks to 4.4 on
-  KITTI, where four of the five models are statistically tied. Twenty-five minutes of fine-tuning adds 47 AP.
+  KITTI, where three of the other four models are not significantly different from RT-DETR. Twenty-five minutes of fine-tuning adds 47 AP.
 - **The gap is not mainly about small objects.** Medium and large objects lose 32–60% of their AP.
 
 Sources: `results/tables/main_results.md`, `results/tables/bootstrap_ci.md`, `results/tables/benchmark.md`.
